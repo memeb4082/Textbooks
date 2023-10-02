@@ -1,0 +1,88 @@
+\documentclass{book}
+\usepackage{glossaries}
+\usepackage{derivative}
+\usepackage{geometry}
+\usepackage{pgfplots}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\geometry{
+    left=10mm,
+    right=10mm,
+    top=10mm,
+    bottom=10mm
+}
+\begin{document}
+    \title{
+        % \begin{flushleft}
+            Queensland University of Technology\\
+            \rule{\linewidth}{0.5pt}
+        % \end{flushleft}
+        \centering
+        \textbf{MZB221} \\
+        Electrical Engineering Mathematics\\
+        \vspace{0.4cm}
+        % \large{BASA MARS-242 Message Transmission}
+        \rule{\linewidth}{1.5pt}
+        \small{\textit{Profressor Nicholas Buttle}}
+    }
+    \author{Dinal Atapattu}
+    \date{\today}
+    \maketitle
+    \thispagestyle{empty}
+    \tableofcontents
+    \chapter{Infinite Series}
+        \section{Sequences, Infinite Series, Convergence}
+        \section{Taylor polynomials, Taylor series, Radius of convergence}
+        \section{Introduction to Fourier series}
+        \section{Constructing Fourier series}
+    \chapter{Vector Calculus}
+        \section{Introduction to Vector Calculus, div, grad, curl}
+            \subsection{Scalar Fields}
+                A scalar field is a function
+                \begin{flalign*}
+                    f:\mathrm{R}^n \to \mathrm{R}
+                \end{flalign*}
+                \textcolor{red}{\fbox{$n=2$}} $f=f(x,y)$
+                \begin{itemize}
+                    \item 2 independent variables $x,y$
+                    \item $f$ is a function that has $x$ and $y$ as inputs and a single real number as
+                    the output
+                \end{itemize}
+                Phyiscal examples of scalar fields are 
+                \begin{itemize}
+                    \item The temperature $T(x,y,z)$, the pressure $p(x,y,z)$,
+                    the density $\rho (x,y,z)$ of a fluid
+                    \item Concentration of a pollutant in a lake $c(x,y,z)$
+                    \item Height of a surface or a mountain $h(x,y)$
+                    \item Charge density $\rho (x,y,z)$, electrical potential $V(x,y,z)$
+                \end{itemize}
+                \subsubsection*{Partial Derivatives}
+                    For $f:\mathrm{R}^2 \to \mathrm{R}$
+                    \begin{flalign*}
+                        \pdv{f}{x} = \lim_{h\to 0} \frac{f(x+h,y)-f(x,y)}{h}, \pdv{f}{y}=\lim_{h\to 0} \frac{f(x,y+h)-f(x,y)}{h}
+                    \end{flalign*}
+                    \begin{itemize}
+                        \item $f_x$ is the rate of change of $f$ in the $x$-direction (y is constant) (and vice-versa)
+                        \item Geometrically, $f_x$ and $f_y$ are the slopes of the surface $z=f(x,y)$ in the $x$ and $y$ directions.
+                    \end{itemize}
+                    For $f:\mathrm{R}^3 \to \mathrm{R}$
+                    \begin{flalign*}
+                        \pdv{f}{x} = \lim_{h\to 0} \frac{f(x+h,y)-f(x,y)}{h}&, \pdv{f}{y}=\lim_{h\to 0} \frac{f(x,y+h)-f(x,y)}{h}\\
+                        \pdv{f}{z} \lim_{h\to 0} \frac{f(z+h,y)-f(z,y)}{h}
+                    \end{flalign*}
+                    \textcolor{red}{No equivalent geometric representation as "surface" ($f(x,y,z)$) is a 4-dimensional hypersolid}
+                \subsubsection*{Directional Derivative of a Scalar Field}
+        \section{Review of Multiple Integration, Change of Variables}
+        \section{Introduction to cylindrical and spheroidal coordinates, integration}
+        \section{Line Integrals, Surface Integrals}
+    \chapter{Differential Equations}
+        \section{Introduction to Laplace transform, Strategy for Solving Linear ODEs}
+        \section{Further Properties of Laplace Transforms, solving more complicated initial value problems}
+        \section{Non-Linear first-order ODEs, Phase lines, Stability, Bi-Furcation}
+        \section{Linear Systems of ODEs, Exact Solutions, Classification, Non-Homogeneous Systems}
+        \section{Non-Linear Systems of ODEs, Phase Plane, Nullclines, Stability}
+\end{document}
