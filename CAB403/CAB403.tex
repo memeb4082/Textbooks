@@ -1,10 +1,11 @@
-\documentclass{book}
+\documentclass[oneside]{book}
 \usepackage{glossaries}
 \usepackage{derivative}
 \usepackage{geometry}
 \usepackage{pgfplots}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usepackage{parskip}
 \usepackage{float}
 \usepackage{lipsum}
 \usepackage{minted}
@@ -542,7 +543,82 @@ dispatch_async(queue, ^{ printf("I am a block."); });
                     \end{tikzpicture}
                     \caption{Lightweight Process (LWP)}
                 \end{figure}
-    \chapter{Synchronisation}z
+    \chapter{Synchronisation}
+        Processes can either execute concurrently or in parallel. These processes may be 
+        interrupted at any time, partially completing execution.
+        Concurrent access to any shared memory may result in data inconsistency if not properly
+        controlled.\\
+        Maintaining data consistency requires mechanisms to ensure the orderly execution of 
+        cooperating processes.
+
+        \hangindent=1cm Example: \\Suppose we wanted to provide a solution to the consumer-product problem that
+        fills \textbf{all} the buffers. We can do so by having an integer \texttt{counter} that keeps
+        track of the number of full buffers. Initially, \texttt{counter} is set to 0. It is incremented
+        by the producer after producing a new buffer, and decremented by the consumer after it consumes
+        a buffer.
+        % side by side for producer consumer 2 figures each code blocks of C
+        \begin{figure}[H]
+            \centering
+            \begin{minipage}{0.49\textwidth}
+                \begin{minted}{c}
+                    while (true) {
+                        /* produce an item in next produced */
+                        while (counter == BUFFER_SIZE);
+                            /* do nothing */
+                        buffer[in] = next_produced;
+                        in = (in + 1) % BUFFER_SIZE;
+                        counter++;
+                    }
+                \end{minted}
+            \end{minipage}
+            \begin{minipage}{0.49\textwidth}
+                \begin{minted}{c}
+                    while (true) {
+                        while (counter == 0);
+                            /* do nothing */
+                        next_consumed = buffer[out];
+                        out = (out + 1) % BUFFER_SIZE;
+                        counter--;
+                        /* consume the item in next_consumed */
+                    }
+                \end{minted}
+            \end{minipage}
+            \caption{Producer and Consumer}
+        \end{figure}
+
+        \section{Race Conditions}
+        While the producer and consumer routines shown are correct seperately,
+        they may not function correctly when executed concurrently.
+        For example: Suppose that the value of the variable \texttt{count} is currently
+        5 and the producer and consumer processes concurrently execute the statements
+        "\texttt{count++}" and "\texttt{count--}". This will lead to the variable 
+        being 4, 5 or 6. With the only correct value being \texttt{count == 5}, which 
+        is executed if the producer and consumer execute seperately.
+        We can show the value maybe incorrect by using the following implementation
+            \begin{flalign*}
+                register_1 &= count\\
+                register_1 &= register_1 + 1\\
+                count &= register_1\\
+            \end{flalign*}
+        where $register_1$ is one of the local CPU registers.\\
+        Similarly, the statement \texttt{count - 1} is implemented as follows
+            \begin{flalign*}
+                register_2 &= count\\
+                register_2 &= register_2 - 1;\\
+                count &= register_2
+            \end{flalign*}
+        where again, $register_2$ is a local CPU register.\\
+        \textcolor{red}{Even though $register_1$ and $register_2$ are local CPU registers, the value of
+        this register will be saved and stored by the interrupt handler}\\
+        The concurrent execution \texttt{count++} and \texttt{count -- 1} is equivalent
+        to the sequential execution where lower evel statements previously are interleaved
+        in an arbitrary order, with the order of the high-level statement is preserved.\
+        \begin{figure}[H]
+            \centering
+            \begin{tabular}{c c c c c}
+                $T_0$ & $producer$ & execute & $register_1 = count$ & \{$register_1$ = 5\}
+            \end{tabular}
+        \end{figure}
     \chapter{Safety Critical Systems}
         \textbf{Safety} is the freedom from conditions that cause death, injury, illness, damage
         to or loss of equipment or property, or environmental harm\\
@@ -703,6 +779,37 @@ dispatch_async(queue, ^{ printf("I am a block."); });
             \end{figure}
             \subsubsection{CPU-I/O Burst Cycle}
     \chapter{Deadlocks}
+    \chapter{Virtual Machines}
+        \section{Benefits and Features}
+            \begin{itemize}
+                \item Templating - create an OS + application VM, provide it to customers, use it to create multiple instances
+                    \subitem Docker containers, AWS AMIs, etc.
+                \item Live Migration - Move a running VM from host to another
+                    \subitem No interruption of user access
+                \item All these features together $\Longrightarrow$ \textcolor{blue}{cloud computing}
+                    \subitem Using APIs, programs tell cloud infrastructure (servers, networking, storage) to create new guests, VMs, virtual desktops
+            \end{itemize}
+        \section{Types of Virtual Machines}
+            Many variations as well as hardware details, assiming VMMs take advantage of hardware features, they can simplify implementation and improve performance
+            All Virtual Machines have a \textcolor{blue}{lifecycle}
+            \begin{itemize}
+                \item Created by the VMM
+                \item Resources assigned to it (cores, amount of memory, networking details, storage details)
+                \item In type 0 hypervisor, resources are usually dedicated
+                \item Other types dedicate or share resource (or mix)
+                \item When no longer needed, VMs can be deleted, freeing resources
+            \end{itemize}
+            Steps are simpler and faster than a physical machine install
+            \begin{itemize}
+                \item Can lead to \textcolor{blue}{VM sprawl} with lots of VMs, history and state are difficult to track
+            \end{itemize}
+        \section{Types of VMs}
+            \subsection{Type 0 Hypervisor}
+                Is an older idea under many names by hardware manufacturers
+                    \begin{itemize}
+                        \item Partitions, Domains
+                    \end{itemize}
+                Hardware features must be implemented in firemware, the VMM is in firmware. Smaller feature set than other types
     \chapter{Practicals}
         \section{Introduction to Operating Systems}
         \section{Operating System Structures}
