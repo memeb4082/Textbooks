@@ -1,7 +1,6 @@
-\documentclass{book}
+\documentclass[oneside]{book}
 \usepackage{glossaries}
 \usepackage{derivative}
-\usepackage{geometry}
 \usepackage{pgfplots}
 \usepackage{graphicx}
 \usepackage{tikz}
@@ -9,14 +8,23 @@
 \usepackage{lipsum}
 \usepackage{circuitikz}
 \usepackage{amsmath}
+\usepackage{fancyhdr}
 \usepackage{amssymb}
-\geometry{
+\usepackage{lastpage}
+\usepackage[a4paper,
     left=10mm,
     right=10mm,
-    top=10mm,
-    bottom=10mm
-}
+    top=12mm,
+    bottom=12mm,
+]{geometry}
 \begin{document}
+\pagestyle{fancy}
+    \fancyhf{}
+\fancyhead[L]{EGB120 Foundations of Electrical Engineering}
+\fancyhead[R]{\nouppercase{\leftmark}}
+\fancyfoot[L]{Dinal Atapattu}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
     \title{
             Queensland University of Technology\\
             \rule{\linewidth}{0.5pt}
@@ -33,5 +41,17 @@
     \maketitle
     \thispagestyle{empty}
     \tableofcontents
-    % \section*{title}
+        \include{chapters/circuits_and_sources.tex}
+        \include{chapters/filters_and_rectifiers.tex}
+        \include{chapters/source_transformation.tex}
+        \include{chapters/ohms_kirchoff_resistive.tex}
+        \include{chapters/diodes.tex}
+        \include{chapters/mesh_analysis.tex }
+        \include{chapters/inductors_capacitors.tex}
+        \include{chapters/rl_rc_timeresponse.tex}
+        \include{chapters/op_amps.tex}
+        \include{chapters/sin_state_analysis}
+        \include{chapters/freq_response_rlc.tex}
+        \include{chapters/filters_rectifiers.tex}
+        \include{chapters/zener_voltage_reg.tex}
 \end{document}

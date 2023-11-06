@@ -11,10 +11,10 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{caption}
-\usepackage{}
 \usepackage{fancyhdr}
 \usepackage{enumitem}
 \usepackage{lastpage}
+\DeclareMathOperator{\sinc}{sinc}
 \usepackage[a4paper,
     left=10mm,
     right=10mm,
@@ -479,6 +479,82 @@
                     \includegraphics[width=0.5\linewidth]{figures/practical_filter.png}
                     \caption{Ideal Filter}
                 \end{figure}
+        \chapter{Fourier Transform}
+            \section{Euler's Identity}
+                \begin{align*}
+                    \cos(\theta) = \frac{e^{j\theta} + e^{-j\theta}}{2}\\   
+                    \sin(\theta) = \frac{e^{j\theta} - e^{-j\theta}}{2j}
+                \end{align*}
+            \section{Exponential Fourier Series}
+                \begin{align*}
+                    s(t) = \sum^{\infty}_{n=-\infty} c_n e^{j2\pi n f_0 t}\\
+                    c_n = \frac{1}{T} \int^{T}_{0} s(t) e^{-j2\pi n f_0 t} dt
+                \end{align*}
+                Multiplying by $e^{-j2\pi m f_0 t}$ and integrating over one period removes all
+                frequency excepts those at $nf_0$.
+            \section{Transforms}
+                \subsection{Fourier Transform}
+                    \begin{align*}
+                        G(f) &= \int^{\infty}_{-\infty} g(t) e^{-j2\pi f t} dt\\
+                    \end{align*}
+                \subsection{Inverse Fourier Transform}
+                    \begin{align*}
+                        g(t) &= \int^{\infty}_{-\infty} G(f) e^{j2\pi f t} df\\
+                    \end{align*}
+            \section{Linearity}
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=0.5\linewidth]{figures/linearity.png}
+                    \caption{Sawtooth Wave}
+                \end{figure}
+                \begin{align*}
+                    c_n &= \frac{1}{T} \int^{T}_{0} s(t) e^{-j2\pi n f_0 t} dt, f_0  \frac{1}{T}\\
+                    &= \frac{1}{T} \left(\int^{\frac{T}{2}}_{0} t e^{-j2\pi n t} dt - \int^{T}_{\frac{T}{2}} t e^{-j2\pi n t} dt\right)\\
+                    &= \frac{1}{T} \left(\int^{\frac{T}{2}}_{0} t e^{-j2\pi n \frac{1}{T} t} dt - \int^{T}_{\frac{T}{2}} t e^{-j2\pi n \frac{1}{T} t} dt\right)\\
+                \end{align*}
+            \section{Alternate Expression of the Fourier Series}
+                \begin{align*}
+                    c_0 &= \frac{1}{T} \int^{T}_{0} s(t) dt\\
+                    c_n &= \frac{1}{T} \int^{T}_{0} s(t) e^{-j2\pi n f_0 t} dt\\
+                    s(t) &= c_0 + \sum_{\substack{n=-\infty\\ n\neq 0}}^{\infty} c_n e^{j2\pi n f_0 t}\\
+                \end{align*}
+                In this form, $c_0$ is the DC component of the signal and $c_n$ is the amplitude of the $n$th harmonic.
+            \section{Gate Function}
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=0.5\linewidth]{figures/gate.png}
+                    \caption{Gate Function}
+                \end{figure}
+                \begin{flalign*}
+                    \Pi_T \left(t\right)\\
+                    rect \left(\frac{t}{T}\right)\\
+                \end{flalign*}
+                \subsection{Fourier Transform}
+                    \begin{flalign*}
+                        \mathcal{F}\left\{ \Pi_T\left(t\right) \right\} &= \int^{\infty}_{-\infty} \Pi_T\left(t\right) e^{-j2\pi f t} dt\\
+                        &= \int^{\frac{T}{2}}_{-\frac{T}{2}} e^{-j2\pi f t} dt\\
+                        &= \frac{1}{-j2\pi f} \left[e^{-j2\pi f t}\right]^{\frac{T}{2}}_{-\frac{T}{2}}\\
+                        &= \frac{1}{-j2\pi f} \left[e^{-j2\pi f \frac{T}{2}} - e^{j2\pi f \frac{T}{2}}\right]\\
+                        &= \frac{1}{-j2\pi f} \left[e^{-j\pi f T} - e^{j\pi f T}\right]\\
+                        &= \frac{1}{\pi f} \left[\frac{e^{j\pi f T} - e^{-j\pi f T}}{2j}\right]\\
+                        &= \frac{T}{T\pi f} \left[\frac{e^{j\pi f T} - e^{-j\pi f T}}{2j}\right]\\
+                        &= T\sinc(Tf)\\
+                    \end{flalign*}
+                \subsection{Time Shifted Gate Function}
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[width=0.5\linewidth]{figures/gate_timeshift.png}
+                        \caption{Time-Shifted Gate Function}
+                    \end{figure}
+                    \begin{flalign*}
+                        \mathcal{F}\left\{ \Pi_T\left(t\right) \right\} &= \int^{\infty}_{-\infty} \Pi_T\left(t\right) e^{-j2\pi f t} dt\\
+                        &= \int^{\frac{t_0 + T}{2}}_{t_0 -\frac{T}{2}} e^{-j2\pi f t} dt\\
+                        &= \frac{1}{-j2\pi f} \left[e^{-j2\pi f t}\right]^{\frac{t_0 + T}{2}}_{t_0 -\frac{T}{2}}\\
+                        &= \frac{1}{-j2\pi f} \left[e^{-j2\pi f \frac{t_0 + T}{2}} - e^{j2\pi f \frac{t_0 + T}{2}}\right]\\
+                        &= \frac{e^{-2j\pi ft_0}}{\pi f} \left[\frac{e^{j\pi f T} - e^{-j\pi f T}}{2j}\right]\\
+                        &= \frac{e^{-2j\pi ft_0}}{\pi f} \left[\frac{T\left(e^{j\pi f T} - e^{-j\pi f T}\right)}{2Tj}\right]\\
+                        &= e^{-j2\pi ft_0}T\sinc\left(fT\right)
+                    \end{flalign*}
         \chapter{Laplace Transform}
             \section{Relationship with the Fourier Transform}
                 \begin{align*}
@@ -516,6 +592,25 @@
                     \item Convert the transfer function back to the time domain using the inverse Laplace Transform
                 \end{enumerate}
             \section{Partial Fraction Expansion}
+                \begin{figure}[H]
+                    \centering
+                    \begin{tabular}{|c|c|}
+                        \hline
+                        \textbf{Form of the Rational Function} & \textbf{Partial Fraction Expansion}\\
+                        \hline
+                        $\frac{ps+q}{(s+a)(s+b)}$ & $\frac{A}{s+a} + \frac{B}{s+b}$\\
+                        \hline
+                        $\frac{ps+q}{(s+a)^2}$ & $\frac{A}{s+a} + \frac{B}{(s+a)^2}$\\
+                        \hline
+                        $\frac{ps^2+qs+r}{(s+a)(s+b)(s+c)}$ & $\frac{A}{s+a} + \frac{B}{s+b} + \frac{C}{s+c}$\\
+                        \hline
+                        $\frac{ps^2+qs+r}{(s+a)^2(s+b)}$ & $\frac{A}{s+a} + \frac{B}{(s+a)^2} + \frac{C}{s+b}$\\
+                        \hline
+                        $\frac{ps^2+qs+r}{(s+a)(s^2+bs+c)}$ & $\frac{A}{s+a} + \frac{Bs+C}{s^2+bs+c}$\\
+                        \hline
+                    \end{tabular}
+                    \caption{Partial Fraction Expansion Forms}
+                \end{figure}
                 \begin{enumerate}
                     \item Factorise the denominator of the transfer function
                     \item Write the transfer function as a sum of fractions with the factors of the denominator as the denominators of the fractions
@@ -553,7 +648,7 @@
                     \hline
                     \textbf{System Type} & \textbf{Nature of Roots} & \textbf{Condition} & \textbf{Roots} & \textbf{System Figure} \\
                     \hline
-                    Overdamped & Two Real Roots & $0 < \zeta < 1$ & $s_1 = -\zeta\omega_n + \omega_n\sqrt{\zeta^2 - 1}$ & 
+                    Overdamped & Two Real Roots & $\zeta > 1$ & $s_1 = -\zeta\omega_n + \omega_n\sqrt{\zeta^2 - 1}$ & 
                     \begin{tikzpicture}[xscale=0.5]
                         \draw[->] (0,0) -- (6,0) node[right] {$t$};
                         \draw[->] (0,0) -- (0,1) node[above] {$x(t)$};
@@ -567,7 +662,7 @@
                         \draw[domain=0:5,variable=\t,smooth,samples=200] plot ({\t},{1 - 3*exp(-3*\t)*\t - exp(-3*\t)});
                     \end{tikzpicture} \\
                     \hline
-                    Underdamped & Two Complex Roots & $\zeta > 1$ & $s_1 = -\zeta\omega_n \pm j\omega_n\sqrt{\zeta^2 - 1}$ & 
+                    Underdamped & Two Complex Roots & $0 < \zeta < 1$ & $s_1 = -\zeta\omega_n \pm j\omega_n\sqrt{\zeta^2 - 1}$ & 
                     \begin{tikzpicture}[xscale=0.5]
                         \draw[->] (0,0) -- (5,0) node[right] {$t$};
                         \draw[->] (0,0) -- (0,1.4) node[above] {$x(t)$};
@@ -614,14 +709,20 @@
             Specifications are 
             \begin{itemize}
                 \item Settling Time
-                    \subitem $t_s = \frac{4}{\zeta\omega_n}$
+                    \subitem $T_s = \frac{4}{\zeta\omega_n}$
                 \item \% Overshoot
                     \subitem $\%OS= e^{\frac{-\zeta\pi}{\sqrt{1 - \zeta^2}}}\times 100$
                 \item Peak Time
                     \subitem $T_p = \frac{\pi}{\omega_n \sqrt{1 - \zeta^2}}$
             \end{itemize}
-    \chapter{Dominant Poles}
-    
+        \section{Step Response of a 1st Order System}
+            Specifications are
+            \begin{itemize}
+                \item Settling Time
+                    \subitem $T_s = \frac{4}{\alpha}$
+                \item Rising Time
+                    \subitem $T_r = \frac{2.2}{\alpha}$
+            \end{itemize}
     \chapter{Tutorial Questions}
         \section{Tutorial 13}
             \subsection*{Question 1}
