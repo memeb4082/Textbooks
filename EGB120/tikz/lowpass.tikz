@@ -1,0 +1,21 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Frequency (Hz)},
+        ylabel={Gain (dB)},
+        title={Low Pass Filter},
+        width=\linewidth,
+        height=0.15\linewidth,
+        xmin=0, xmax=10,
+        ymin=0, ymax=1,
+        ytick={1},
+        xtick={0, 2, 3, 7, 10},
+        xticklabels={0, $\omega_1$, $\omega_2$, $\omega_3$, $\omega_4$, $\omega_5$},
+        axis lines=middle,
+    ]
+    \addplot[domain=0:10, samples=100, color=red] coordinates {
+        (0, 0.5)
+        (3, 0.5)
+        (3, 0)
+    };
+    \end{axis}
+\end{tikzpicture}

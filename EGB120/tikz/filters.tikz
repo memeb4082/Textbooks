@@ -1,0 +1,86 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Frequency (Hz)},
+        ylabel={Gain (dB)},
+        title={Low Pass Filter},
+        width=\linewidth,
+        height=0.15\linewidth,
+        xmin=0, xmax=10,
+        ymin=0, ymax=1,
+        ytick={1},
+        xtick={0, 2, 4, 6, 8, 10},
+        axis lines=middle,
+    ]
+    \addplot[domain=0:10, samples=100, color=red] coordinates {
+        (0, 0.5)
+        (3, 0.5)
+        (3, 0)
+    };
+    \end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Frequency (Hz)},
+        ylabel={Gain (dB)},
+        title={High Pass Filter},
+        width=\linewidth,
+        height=0.15\linewidth,
+        xmin=0, xmax=10,
+        ymin=0, ymax=1,
+        ytick={1},
+        xtick={0, 2, 4, 6, 8, 10},
+        axis lines=middle,
+    ]
+    \addplot[domain=0:10, samples=100, color=red] coordinates {
+        (7, 0)
+        (7, 0.5)
+        (10, 0.5)
+    };
+    \end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Frequency (Hz)},
+        ylabel={Gain (dB)},
+        title={Band Pass Filter},
+        width=\linewidth,
+        height=0.15\linewidth,
+        xmin=0, xmax=10,
+        ymin=0, ymax=1,
+        ytick={1},
+        xtick={0, 2, 4, 6, 8, 10},
+        axis lines=middle,
+    ]
+    \addplot[domain=0:10, samples=100, color=red] coordinates {
+        (3, 0)
+        (3, 0.5)
+        (7, 0.5)
+        (7, 0)
+    };
+    \end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Frequency (Hz)},
+        ylabel={Gain (dB)},
+        title={Band Stop Filter},
+        width=\linewidth,
+        height=0.15\linewidth,
+        xmin=0, xmax=10,
+        ymin=0, ymax=1,
+        ytick={1},
+        xtick={0, 2, 4, 6, 8, 10},
+        axis lines=middle,
+    ]
+     \addplot[domain=0:10, samples=100, color=red] coordinates {
+        (0, 0.5)
+        (3, 0.5)
+        (3, 0)
+    };
+    \addplot[domain=0:10, samples=100, color=red] coordinates {
+        (7, 0)
+        (7, 0.5)
+        (10, 0.5)
+    };
+    \end{axis}
+\end{tikzpicture}
