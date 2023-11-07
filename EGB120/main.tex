@@ -10,9 +10,10 @@
 \usepackage{amsmath}
 \usepackage{fancyhdr}
 \usepackage{amssymb}
-\usepackage{subcaption}
+\usepackage[list=true]{subcaption}
 \usepackage{lastpage}
 \usepackage{array}
+\usepackage{hyperref}
 \usepackage[a4paper,
     left=10mm,
     right=10mm,
@@ -324,6 +325,146 @@
                     where $I_s$ is the saturation current, $V_T$ is the thermal voltage, $k$ is Boltzmann's constant, $T$ is the temperature in Kelvin and $q$ is the charge of an electron.
             \section{Operating Points}
             \section{Load Lines}
+        \chapter{RL and RC Circuits}
+            \section{Natural Response}
+                Is a decaying response for an RL and RC circuit
+                \begin{figure}[H]
+                    \centering
+                    \begin{subfigure}{\linewidth}
+                        \begin{equation*}
+                            v(t) = V_0 e^{-\frac{t}{RC}}
+                        \end{equation*}
+                        \caption{Equation for RC Circuit Natural Response}
+                    \end{subfigure}
+                    \begin{subfigure}[t]{0.45\linewidth}
+                        \centering
+                        \begin{circuitikz}[american]
+                            \draw (0,0)
+                                to[capacitor, v=C, l=v, invert] (0,5)
+                                to[short] (5,5)
+                                to[resistor, R=R] (5,0)
+                                to[short] (0,0);
+                        \end{circuitikz}
+                        \caption{Natural Response RC Circuit} 
+                    \end{subfigure}
+                    \begin{subfigure}[t]{0.45\linewidth}
+                        \centering
+                        \begin{tikzpicture}[scale=0.8]
+                            \begin{axis}[
+                                xlabel=$t$,
+                                ylabel=$v$,
+                                legend style={nodes={scale=0.8, transform shape}},
+                            ]
+                            \addplot[blue, domain=0:5] {5*exp(-x)};
+                            \end{axis}
+                        \end{tikzpicture}
+                        \caption{VT Curve for RC Circuit Natural Response}
+                    \end{subfigure}
+                    \caption{RC Natural Response}
+                \end{figure}
+                \begin{figure}[H]
+                    \centering
+                    \begin{subfigure}{\linewidth}
+                        \begin{equation*}
+                            i(t) = I_0 e^{-\frac{Rt}{L}}
+                        \end{equation*}
+                        \caption{Equation for RL Circuit Natural Response}
+                    \end{subfigure}
+                    \begin{subfigure}[t]{0.45\linewidth}
+                        \centering
+                        \begin{circuitikz}[american]
+                            \draw (0,0)
+                                to[inductor, v=L, l=i, invert] (0,5)
+                                to[short] (5,5)
+                                to[resistor, R=R] (5,0)
+                                to[short] (0,0);
+                        \end{circuitikz}
+                        \caption{Natural Response RL Circuit} 
+                    \end{subfigure}
+                    \begin{subfigure}[t]{0.45\linewidth}
+                        \centering
+                        \begin{tikzpicture}[scale=0.8]
+                            \begin{axis}[
+                                xlabel=$t$,
+                                ylabel=$i$,
+                                legend style={nodes={scale=0.8, transform shape}},
+                            ]
+                            \addplot[blue, domain=0:5] {5*exp(-x)};
+                            \end{axis}
+                        \end{tikzpicture}
+                        \caption{VT Curve for RL Circuit Natural Response}
+                    \end{subfigure}
+                    \caption{RL Natural Response}
+                \end{figure}
+            \section{Step Response}
+                \begin{figure}[H]
+                    \centering
+                    \begin{subfigure}{\linewidth}
+                        \begin{equation*}
+                            v(t) = I_sR + (V_0 - I_sR)e^{-\frac{t}{RC}}
+                        \end{equation*}
+                        \caption{Equation for RC Circuit Step Response}
+                    \end{subfigure}
+                    \begin{subfigure}{0.45\linewidth}
+                        \begin{circuitikz}[american]
+                            \draw (0,0)
+                                to[current source, I=$I_s$] (0,5)
+                                to[short] (3,5)
+                                to[switch, l=$\text{t=0}$] (5,5)
+                                to[capacitor, l=C, invert] (5,0)
+                                to[short] (0,0);
+                            \draw (2.5, 5)
+                                to[resistor, R=R] (2.5, 0) node[ground]{};
+                        \end{circuitikz}
+                        \caption{Step Response RC Circuit}
+                    \end{subfigure}
+                    \begin{subfigure}{0.45\linewidth}
+                        \begin{tikzpicture}[scale=0.8]
+                            \begin{axis}[
+                                xlabel=$t$,
+                                ylabel=$v$,
+                                legend style={nodes={scale=0.8, transform shape}},
+                            ]
+                                \addplot[blue, domain=0:5] {5 - 5*exp(-x)};
+                            \end{axis}
+                        \end{tikzpicture}
+                        \caption{VT Curve for RC Circuit Step Response}
+                    \end{subfigure}
+                    \caption{RC Step Response}
+                \end{figure}
+                \begin{figure}[H]
+                    \centering
+                    \begin{subfigure}{\linewidth}
+                        \begin{equation*}
+                            i(t) = \frac{V_s}{R} + \left(I_o - \frac{V_s}{R}\right)e^{-\frac{Rt}{L}}
+                        \end{equation*}
+                        \caption{Equation for RL Circuit Step Response}
+                    \end{subfigure}
+                    \begin{subfigure}{0.45\linewidth}
+                        \begin{circuitikz}[american]
+                            \draw (0,0)
+                                to[voltage source, v=$V_s$] (0,5)
+                                to[short] (3,5)
+                                to[switch, l=$\text{t=0}$] (5,5)
+                                to[inductor, l=L, invert] (5,0)
+                                to[short] (0,0);
+                        \end{circuitikz}
+                        \caption{Step Response RL Circuit}
+                    \end{subfigure}
+                    \begin{subfigure}{0.45\linewidth}
+                        \begin{tikzpicture}[scale=0.8]
+                            \begin{axis}[
+                                xlabel=$t$,
+                                ylabel=$i$,
+                                legend style={nodes={scale=0.8, transform shape}},
+                            ]
+                                \addplot[blue, domain=0:5] {5 - 5*exp(-x)};
+                            \end{axis}
+                        \end{tikzpicture}
+                        \caption{VT Curve for RL Circuit Step Response}
+                    \end{subfigure}
+                    \caption{RL Step Response}
+                \end{figure}
         \chapter{Filters and Rectifiers}
             Filters keep the desired frequency components of a signal and remove the unwanted frequency components.\\
             They do this in the frequency domain
@@ -537,6 +678,8 @@
                     \includegraphics[width=0.6\linewidth]{figures/band_pass_stop.png}
                     \caption{Band Pass and Band Stop Filters}
                 \end{figure}
+        \listoffigures
+        % \listoftables
         \chapter{Tutorials}
-            \include{tutorials/sequential_switching}
+            \input{tutorials/sequential_switching}
 \end{document}
