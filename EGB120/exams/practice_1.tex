@@ -121,27 +121,8 @@
         \end{figure}
         \item Plot the response calculated in part (3) in a Bode plot\\
             \textbf{Solution:}\\
-            \begin{tikzpicture}[xscale=15/4]
-                \begin{scope}[yscale=3/50]
-                \UnitedB
-                \semilog{0}{4}{-60}{60}
-                \BodeGraph[thick,red]{0:4}
-                {-\POAmpAsymp{1}{0.006}+
-                \SOAmpAsymp{1}{0.3}{100}}
-                \BodeGraph[thick]{0:4}
-                {-\POAmp{1}{0.0006}+
-                \SOAmp{1}{0.3}{100}}
-                \end{scope}
-                \begin{scope}[yshift=-7cm,yscale=3/90]
-                \UniteDegre
-                \OrdBode{15}
-                \semilog{0}{4}{-180}{90}
-                \BodeGraph[thick,red]{0:4}
-                {-\POArgAsymp{1}{0.006}+
-                \SOArgAsymp{1}{0.3}{100}}
-                \BodeGraph[thick]{0:4}
-                {-\POArg{1}{0.006}+
-                \SOArg{1}{0.3}{100}}
-                \end{scope}
-                \end{tikzpicture}
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.6\linewidth,trim={0 7.5cm 0 7.5cm},clip]{figures/bodeplot.pdf}
+            \end{figure}
     \end{enumerate}
