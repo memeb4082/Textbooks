@@ -5,7 +5,7 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{float}
-\usepackage{lipsum}
+\usepackage{booktabs}
 \usepackage{circuitikz}
 \usepackage{amsmath}
 \usepackage{fancyhdr}
@@ -38,7 +38,7 @@
         Foundations of Electrical Engineering\\
         \vspace{0.4cm}
         \rule{\linewidth}{1.5pt}
-        \small{\textit{Profressor Geoff Walker}}
+        \small{\textit{Professor Geoff Walker}}
     }
     \author{Dinal Atapattu}
     \date{\today}
@@ -323,8 +323,8 @@
                         i_D = I_s \left( e^{\frac{v_D}{V_T} -1} \right) && V_T = \frac{kT}{q}
                     \end{align*}
                     where $I_s$ is the saturation current, $V_T$ is the thermal voltage, $k$ is Boltzmann's constant, $T$ is the temperature in Kelvin and $q$ is the charge of an electron.
-            \section{Operating Points}
-            \section{Load Lines}
+            % \section{Operating Points}
+            % \section{Load Lines}
         \chapter{RL and RC Circuits}
             \section{Natural Response}
                 Is a decaying response for an RL and RC circuit
@@ -465,6 +465,71 @@
                     \end{subfigure}
                     \caption{RL Step Response}
                 \end{figure}
+        \chapter{AC}
+            \section{AC Circuit Analysis}
+                \begin{figure}[H]
+                    \centering
+                    \begin{tabular}{ccc}
+                        \textbf{Element} & \textbf{Impedance} & \textbf{Diagram}\\
+                        \toprule
+                        Resistor & $R$ & \begin{circuitikz}[american]
+                            \draw (0,0) to[resistor] (2,0);\end{circuitikz}\\
+                        Capacitor & $\frac{1}{j\omega C}$ or $\omega L \angle 90^{\circ}$ & \begin{circuitikz}[american] \draw (0,0) to[capacitor, l=C] (2,0);\end{circuitikz}\\
+                        Inductor & $j\omega L$ or $\frac{1}{\omega L} \angle -90^{\circ}$ & \begin{circuitikz}[american] \draw (0,0) to[inductor, l=L] (2,0);\end{circuitikz}\\
+                    \end{tabular}
+                    \caption{Impedance of Circuit Elements}
+                \end{figure}
+            \section{Bode Plots}
+                Plot frequency on x axis using the log of frequency
+                \begin{itemize}
+                    \item 1, 10, 100, 1000, 10000 are equally spaced
+                    \item 3, 30, 300, 3000, 30000 are midpoints
+                \end{itemize}
+                Plot the log of gain (decibels) on one y axis and the phase (degrees) on another y axis
+                \begin{figure}[H]
+                    \centering
+                    \begin{subfigure}{0.22\linewidth}
+                        \centering
+                        \begin{align*}
+                            \omega = 2\pi f\\\\
+                        \end{align*}
+                        \caption{Hz to Radians per Second}
+                    \end{subfigure}
+                    \begin{subfigure}{0.22\linewidth}
+                        \centering
+                        \begin{align*}
+                            \text{Gain}_{\text{dB}} = 20\log_{10}\left(\text{Gain}\right)\\\\
+                        \end{align*}
+                        \caption{Gain to Decibels}
+                    \end{subfigure}
+                    \begin{subfigure}{0.22\linewidth}
+                        \centering
+                        \begin{align*}
+                            H(\omega) = \frac{V_o(\omega)}{V_i(\omega)}\\\\
+                        \end{align*}
+                        \caption{Transfer Function}
+                    \end{subfigure}
+                    \begin{subfigure}{0.22\linewidth}
+                        \centering
+                        \begin{align*}
+                            \text{Phase} &= \angle H(\omega)\\
+                            &= \arctan \frac{\text{imag} (H(\omega))}{\text{real} (H(\omega))}
+                        \end{align*}
+                        \caption{Transfer Function to Phase}
+                    \end{subfigure}
+                    \begin{subfigure}{0.22\linewidth}
+                        \centering
+                        \begin{align*}
+                            \text{Gain} &= \left|(H(\omega))\right|\\
+                            &= \sqrt{\left(\text{real} (H(\omega))\right)^2 + \left(\text{imag} (H(\omega))\right)^2}
+                        \end{align*}
+                        \caption{Transfer Function to Gain}
+                    \end{subfigure}
+                    \caption{Bode Plot Equations}
+                \end{figure}
+            \section{Transfer Function $H(\omega)$ - The 3dB Point}
+                The 3dB point is the frequency at which the gain is $\frac{1}{\sqrt{2}}$ of the maximum gain.
+                Also called the \textbf{half power point} or \textbf{half power frequency} or \textbf{break frequency} or \textbf{corner frequency}
         \chapter{Filters and Rectifiers}
             Filters keep the desired frequency components of a signal and remove the unwanted frequency components.\\
             They do this in the frequency domain
@@ -680,6 +745,4 @@
                 \end{figure}
         \listoffigures
         % \listoftables
-        \chapter{Tutorials}
-            \input{tutorials/sequential_switching}
 \end{document}

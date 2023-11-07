@@ -1,4 +1,5 @@
-\section{Tutorial 7 \- Sequential Switching}
+\chapter{Tutorial 7 \- Sequential Switching}
+\section{Practice Question}
 Consider the circuit below. The initial current in the inductor is $i_l(0-) = 0$. Find expressions for
 $iL(t)$ and $v(t)$ for $t \geq 0$ and sketch to scale versus time.
 \begin{figure}[H]
@@ -18,7 +19,7 @@ Using this we get that
     i(t) &= \frac{100}{1000} + \left(0 - \frac{100}{1000}\right)e^{-\frac{1000}{1\times{-3}}t} &&= 0.1 - 0.1e^{-1\times10^6 t} \\
     v(t) &= L \odv{i}{t} = 1\times10^{-3} \times \odv{}{t} \left(0.1 - 0.1e^{-1\times10^6 t}\right) = 0.1\times10^3 e^{-1\times10^6 t} &&= 100e^{-1\times10^6 t}
 \end{align*}
-\subsection{Tutorial Question}
+\section{Tutorial Question}
     Igor the Mad Scientist is planning to reanimate a corpse (again). His plan is to capture energy
     from a lightning bolt into a capacitor, and then to discharge the capacitor into the torso and
     brain. The lower body is reanimated from a voltage supply. The electrical models of the body
