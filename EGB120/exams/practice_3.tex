@@ -43,9 +43,9 @@
                     \draw (0,0)
                     to [short] (12,0);
                     % components
-                    \draw (4,2) to [capacitor, C=47$\mu$F] (4,0);
-                    \draw (6,2) to [capacitor, C=0.33$\mu$F] (6,0);
-                    \draw (10,2) to [capacitor, C=0.1$\mu$F] (10,0);
+                    \draw (4,2) to [capacitor, C=47$\mu$F, *-*] (4,0);
+                    \draw (6,2) to [capacitor, C=0.33$\mu$F, *-*] (6,0);
+                    \draw (10,2) to [capacitor, C=0.1$\mu$F, *-*] (10,0);
                     \node[right] at (12,1) {$v_{out} = 10$ V};
                     % arrow plus minus at 10
                     \draw[->] (12,1.2) -- (12,2);
@@ -68,9 +68,9 @@
                     to node[rectangle, draw, fill=white] {LM7910} (10,0)
                     to [short] (12,0);
                     % components
-                    \draw (4,2) to [capacitor, C=47$\mu$F] (4,0);
-                    \draw (6,2) to [capacitor, C=0.33$\mu$F] (6,0);
-                    \draw (10,2) to [capacitor, C=0.1$\mu$F] (10,0);
+                    \draw (4,2) to [capacitor, C=47$\mu$F, *-*] (4,0);
+                    \draw (6,2) to [capacitor, C=0.33$\mu$F, *-*] (6,0);
+                    \draw (10,2) to [capacitor, C=0.1$\mu$F, *-*] (10,0);
                     \node[right] at (12,1) {$v_{out} = -10$ V};
                     % arrow plus minus at 10
                     \draw[->] (12,1.2) -- (12,2);
@@ -84,37 +84,37 @@
                     \draw (8,2) to [short] (8,0);
                     \draw (0,0)
                         to [sinusoidal voltage source, v<=12V RMS] (0,2)
-                        to [short] (1,2)
+                        to [short, -*] (1,2)
                         to [diode, l=0.7V] (4,2)
-                        to [short] (6,2)
+                        to [short, -*] (6,2)
                         to node[rectangle, draw, fill=white] {LM7810} (10,2)
                         to [short] (12,2);
                     \draw (0,0)
                         to [short] (12,0);
                     % components
-                    \draw (4,2) to [capacitor, C=47$\mu$F] (4,0);
-                    \draw (6,2) to [capacitor, C=0.33$\mu$F] (6,0);
-                    \draw (10,2) to [capacitor, C=0.1$\mu$F] (10,0);
+                    \draw (4,2) to [capacitor, C=47$\mu$F, *-*] (4,0);
+                    \draw (6,2) to [capacitor, C=0.33$\mu$F, *-*] (6,0);
+                    \draw (10,2) to [capacitor, C=0.1$\mu$F, *-*] (10,0);
                     \node[right] at (12,1) {$v_{out} = 10$ V};
                     % arrow plus minus at 10
                     \draw[->] (12,1.2) -- (12,2);
                     \draw[->] (12,0.8) -- (12,0);
                     % negative part
-                    \draw (8,0) to [short] (8,-2);
-                    \draw (8,-2) to [short] (8,0);
+                    \draw (8,0) to [short, -*] (8,-2);
+                    \draw (8,-2) to [short, -*] (8,0);
                     \draw (1,-2)
                         to [diode, l=0.7, invert] (4,-2)
-                        to [short] (6,-2)
+                        to [short, -*] (6,-2)
                         to [short] (12,-2);
                     \draw (4,-2)
-                        to [short] (4,-2)
-                        to [short] (6,-2)
+                        to [short, -*] (4,-2)
+                        to [short, -*] (6,-2)
                         to node[rectangle, draw, fill=white] {LM7910} (10,-2)
                         to [short] (12,-2);
                     % components
-                    \draw (4,0) to [capacitor, C=47$\mu$F] (4,-2);
-                    \draw (6,0) to [capacitor, C=0.33$\mu$F] (6,-2);
-                    \draw (10,0) to [capacitor, C=0.1$\mu$F] (10,-2);
+                    \draw (4,0) to [capacitor, C=47$\mu$F, *-*] (4,-2);
+                    \draw (6,0) to [capacitor, C=0.33$\mu$F, *-*] (6,-2);
+                    \draw (10,0) to [capacitor, C=0.1$\mu$F, *-*] (10,-2);
                     \node[right] at (12,-1) {$v_{out} = -10$ V};
                     % arrow plus minus at 10
                     \draw[->] (12,-0.8) -- (12,0);
@@ -140,7 +140,7 @@
                     \node[above] at (-5,0.7) {$v_{in}$};
                     \draw (-3,0.5) to[resistor, l=$1\text{k}\Omega$] (opamp.-);
                     \draw (opamp.-) to[short] ++(0,1) to[short] ++(0.5,0) to[resistor, l=$100\text{k}\Omega$] ++(3,0) to[short] ++(0,-1.5);
-                    \draw (opamp.out) to[short] ++(2,0) node[right] {$v_o$};
+                      \draw (opamp.out) to[short] ++(2,0) node[right] {$v_o$};
                     % ground
                     \draw (opamp.+) to[short] ++(-0.5,0) to[short] ++(0,-0.5) node[ground] {};
                 \end{circuitikz}
@@ -167,9 +167,9 @@
             \begin{tabular}{cccc}
                 \textbf{Frequency} & $\boldsymbol{H(\omega)}$ & \textbf{Gain} & $\boldsymbol{\angle H(\omega)}$ \\
                 \toprule
-                100Hz & $9.947\angle -95.71^{\circ}$ & 19.948 & -95.71\\
-                1kHz & $70.76\angle -134.97^{\circ}$ & 36.985 & -134.97\\
-                10kHz & $99.5\angle -174.28^{\circ}$ & 39.957 & -174.28\\
+                100Hz & $9.947\angle 84.2949^{\circ}$ & 19.948 & 84.2949\\
+                1kHz & $70.68\angle 45.03^{\circ}$ & 36.985 & 45.03\\
+                10kHz & $99.5\angle 5.72^{\circ}$ & 39.957 & 5.72\\
                 \bottomrule
             \end{tabular}
         \end{figure}

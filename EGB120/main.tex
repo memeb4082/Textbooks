@@ -13,7 +13,7 @@
 \usepackage[list=true]{subcaption}
 \usepackage{lastpage}
 \usepackage{array}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage[a4paper,
     left=10mm,
     right=10mm,
@@ -444,6 +444,8 @@
                         \begin{circuitikz}[american]
                             \draw (0,0)
                                 to[voltage source, v=$V_s$] (0,5)
+                                to[short] (1,5)
+                                to[resistor, R=R] (3,5)
                                 to[short] (3,5)
                                 to[switch, l=$\text{t=0}$] (5,5)
                                 to[inductor, l=L, invert] (5,0)
