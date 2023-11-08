@@ -29,11 +29,10 @@
             C &= \frac{10\times 10^{-3}}{50\times \left(12\sqrt{2} - 0.7 - (2+10)\right)} \tag{+2 regulated output voltage for linear regulator}\\
             C &= 47\mu \text{F}
         \end{flalign*}
-        \textbf{Positive voltage regulator:}
+        \textbf{Positive voltage regulator:}\\
             \begin{figure}[H]
                 \centering
                 \begin{circuitikz}[american]
-                \includegraphics[width=0.6\linewidth,trim={0 7.5cm 0 7.5cm},clip]{figures/bodeplot.pdf}
                     \draw (0,0) 
                     to[sinusoidal voltage source, v<=12V RMS] (0,2)
                     to [diode, l=0.7V] (4,2)

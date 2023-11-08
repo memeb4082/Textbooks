@@ -223,6 +223,19 @@
                         i_j &= \frac{R_{eq}}{R_{j}}i
                     \end{flalign*}
                 \end{minipage}
+        \chapter{Source Transformation}
+            \section{Thevenin Equivalent}
+                Voltage source with a series resistance
+                \begin{figure}[H]
+                    \centering
+                    \begin{circuitikz}[american]
+                        \draw (0,0)
+                            to[voltage source, V=$V_{TH}$, invert] (0,2)
+                            to[resistor, R=$R_{TH}$, -*] (2,2)
+                            to[open] (2,0)
+                            to[short, *-] (0,0);
+                    \end{circuitikz}
+                \end{figure}
         \chapter{Diodes}
             Current flows from the anode to the cathode and the voltage across the diode is positive.\\
             A diode requires voltage to be applied across it to conduct current. This voltage is called the \textbf{forward voltage}.
@@ -707,7 +720,7 @@
                                 \frac{v_o}{v_{in}} &= -\frac{R_2}{R_1 + \frac{1}{j\omega C_1}} = -\frac{R_2}{R_1} \frac{j\omega}{j\omega + \frac{1}{R_1 C_1}}\\
                             \end{align*}
                             High pass filter with\\
-                            $\omega_c = \frac{1}{R_1 C_1} = \frac{1}{10^3 \times 10^{-6}} = 1000\text{rad/s}$\\\\
+                            $\omega_c = \frac{1}{R_1 C} = \frac{1}{10^3 \times 10^{-6}} = 1000\text{rad/s}$\\\\
                             Gain of $-\frac{R_2}{R_1} = -10$ in passband
                         \end{minipage}
                     \subsubsection{Active Low Pass Filter}
