@@ -33,7 +33,7 @@
             \begin{figure}[H]
                 \centering
                 \begin{circuitikz}[american]
-                    \draw (8,2) to [short] (8,0);
+                \includegraphics[width=0.6\linewidth,trim={0 7.5cm 0 7.5cm},clip]{figures/bodeplot.pdf}
                     \draw (0,0) 
                     to[sinusoidal voltage source, v<=12V RMS] (0,2)
                     to [diode, l=0.7V] (4,2)
@@ -151,7 +151,7 @@
                 \left|\text{Gain}\right| = \left|-\frac{R_2}{R_1}\right| &= 100\\
                 \text{Let }R_1 &= 1\text{k}\Omega\\
                 \therefore R_2 &= 100\text{k}\Omega\\
-                C = \frac{1}{2\pi f R_2} = \frac{1}{2\pi \times 1\text{k}\times 1\text{k}} &= 159\text{nF}\\
+                C = \frac{1}{2\pi f R_1} = \frac{1}{2\pi \times 1\text{k}\times 1\text{k}} &= 159\text{nF}\\
             \end{flalign*}
         \end{minipage}
         \item Perform frequency response analysis for the amplifier and filter you designed in part (2)
