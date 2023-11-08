@@ -22,9 +22,15 @@
                         % op amp inverting 
                         \draw (0,0) node[op amp] (opamp) {};
                         \draw (opamp.-)
-                            to[short, -*] ++(0,1);
+                            to[short] ++(-1,0) to [resistor, R=$R_1$] ++(-2,0);
                         \draw (opamp.+)
-                            to[short, -*] ++(0,-2);
+                            to[short, -*] ++(-3,0);
+                        \draw (opamp.-)
+                            to[short] ++(0,1)
+                            to[resistor, R=$R_2$] ++(3,0)
+                            to[short] ++(0,-1.5);
+                        \draw (opamp.out)
+                            to[short] ++(2,0);
                         % circuit
                     \end{circuitikz}
                 \end{figure}
@@ -44,8 +50,8 @@
                         \centering
                         \begin{circuitikz}[american]
                             \draw (0,0)
-                                to[resistor, R=R3] (0,2.5)
-                                to[resistor, R=R4] (0,5)
+                                to[resistor, R=$R_3$] (0,2.5)
+                                to[resistor, R=$R_4$] (0,5)
                                 to[short] (5,5)
                                 to[voltage source, v<=5V] (5,1)
                                 to[short] (5,0)
@@ -67,14 +73,14 @@
                             \draw (0,0)
                                 to[voltage source, v=5V, invert] (0,4)
                                 to[short] (2,4)
-                                to[resistor, R=R1] (2,2)
-                                to[resistor, R=R2] (2,0)
+                                to[resistor, R=$R_3$] (2,2)
+                                to[resistor, R=$R_4$] (2,0)
                                 to[short] (0,0);
                             \draw (2,2)
                                 to[short] (4,2)
                                 to[open] (4,0)
                                 to[short] (2,0);
-                            \node at (4,1) {$v_{out}$};
+                            \node at (4,1) {$v_{b}$};
                             \draw [->] (4,0.8) -- (4,0.1);
                             \draw [->] (4,1.1) -- (4,1.8);
                         \end{circuitikz}
@@ -82,7 +88,7 @@
                 \end{minipage}
                 \begin{minipage}{0.3\linewidth}
                     \begin{flalign*}
-                        v_{out} &= \frac{R_2}{R_1 + R_2} v_{in}\\
+                        v_{b} &= \frac{R_2}{R_1 + R_2} v_{in}\\
                         0.5 &= \frac{R_2}{R_1 + R_2} 5\\
                         0.1 &= \frac{R_2}{R_1 + R_2}\\
                         10(R_1 + R_2) &= R_2\\
@@ -92,15 +98,64 @@
                 \end{minipage}
         \item Given $Sw_1$ is open, the amplifier is turned on for enough time, such that the voltages
         stabilise, Michael connects the motor by closing Sw2 and the motor starts to move. Find
-        the step response of the motor current, iout. Assume that the amplifier output resistance is
+        the step response of the motor current, $i_{out}$. Assume that the amplifier output resistance is
         negligible, it does not current limit and the motor inductor has been de-energised\\
             \textbf{Solution:}\\
+            By closing $Sw_2$ the input of the op amp is connected to the positive node, changing it to
+            a non-inverting amplifier.\\
+            Therefore, $v_b$ will be +0.5V.\\
+            \begin{minipage}{0.6\linewidth}
+                Looking at the motor circuit we see the following
+                \begin{figure}[H]
+                    \centering
+                    \begin{circuitikz}[american]
+                        \draw (0,0)
+                            to[voltage source, v=$0.5V$, invert] (0,2)
+                            to[resistor, R=$4\Omega$] (2,2)
+                            to[inductor, L=10mH] (2,0)
+                            to[short] (0,0);
+                    \end{circuitikz}
+                \end{figure}
+            \end{minipage}
+            \begin{minipage}{0.3\linewidth}
+                Noting that this is the step response of an RL circuit
+                \begin{flalign*}
+                    i(t) &= \frac{V}{R} \left(1 - e^{-\frac{R}{L}t}\right)\\
+                    &= \frac{0.5}{4} \left(1 - e^{-\frac{4}{0.01}t}\right)\\
+                    &= 1.25 \left(1 - e^{-40t}\right)
+                \end{flalign*}
+            \end{minipage}
         \item What is the steady state voltage across the motor?\\
             \textbf{Solution:}\\
+            In steady state, the inductor is replaced with a short circuit.\\
+            As the resistor is the only element in the circuit, the steady state voltage across the motor will be
+            0.5V.
         \item Perform frequency response analysis from vin, to the voltage across the motor inductor,
         when both switches are closed and Michael applies three different input signals of 10 Hz,
-        100 Hz and 1000 Hz through the system?
+        100 Hz and 1000 Hz through the system?\\
             \textbf{Solution:}\\
+            Using the circuit from (3) we can see it is in a voltage divider configuration, where a gain of -5 is applied as
+            the input is connected to the negative node of the op amp.\\
+            \begin{flalign*}
+                v_{out} &= -5\frac{Z_L}{Z_L + Z_R} v_{in}\\
+                &= -5\frac{j\omega L}{j\omega L + R} v_{in}\\
+                &= -5\frac{j\omega \times 10^{-2}}{j\omega \times 10^{-2} + 4} v_{in}\\
+                &= -5\frac{j\omega}{400+j\omega}
+            \end{flalign*}
+            \begin{figure}[H]
+                \centering
+                \begin{tabular}{cccc}
+                    $\boldsymbol{\omega}$ & $\boldsymbol{H(\omega)}$ & \textbf{Gain} & $\boldsymbol{\angle H(\omega)}$ \\
+                    \toprule
+                    $20\pi$ & $0.776\angle 81.07^{\circ}$ & -2.203 & 81.07\\
+                    $200\pi$ & $4.218\angle 32.48^{\circ}$ & 21.203 & 32.48\\
+                    $2000\pi$ & $4.99\angle 3.64^{\circ}$ & 41.203 & 3.64\\
+                \end{tabular}
+            \end{figure}
         \item Plot the response calculated in part (e) in a Bode plot\\
             \textbf{Solution:}\\
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.8\linewidth,trim={0 5cm 0 5cm},clip]{figures/bodeplot_prac2.pdf}
+            \end{figure}
     \end{enumerate}
