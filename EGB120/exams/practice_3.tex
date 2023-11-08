@@ -160,8 +160,9 @@
         \textbf{Solution:}
         Using the general form for the transfer function of an active high pass filter:
         \begin{flalign*}
-            H(\omega) &= \frac{R_2}{R_1} \frac{j\omega}{j\omega + \frac{1}{R_2C_1}} = 100 \frac{j\omega}{j\omega + \frac{1}{1\times 10^3 \times 159\times 10^{-9}}} = 100\frac{j\omega}{j\omega + 6289.31}
+            H(\omega) &= -\frac{R_2}{R_1} \frac{j\omega}{j\omega + \frac{1}{R_2C_1}} = -100 \frac{j\omega}{j\omega + \frac{1}{1\times 10^3 \times 159\times 10^{-9}}} = -100\frac{j\omega}{j\omega + 6289.31}
         \end{flalign*}
+        Note that angles are shifted to the positive quadrant to simplify plotting (still applies the same phase shift)
         \begin{figure}[H]
             \centering
             \begin{tabular}{cccc}
