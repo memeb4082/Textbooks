@@ -2,23 +2,32 @@
 \usepackage{glossaries}
 \usepackage{derivative}
 \usepackage{geometry}
-\usepackage{pgfplots}
-\usepackage{graphicx}
-\usepackage{tikz}
 \usepackage{parskip}
 \usepackage{float}
+\usepackage{subcaption}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx}
 \usepackage{lipsum}
 \usepackage{minted}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usetikzlibrary{decorations.pathreplacing,calc}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
 \geometry{
     left=10mm,
     right=10mm,
-    top=10mm,
-    bottom=10mm
+    top=12mm,
+    bottom=12mm,
 }
 \begin{document}
+\pagestyle{fancy}
+    \fancyhf{}
+\fancyhead[L]{CAB403 - Systems Programming}
+\fancyhead[R]{\nouppercase{\leftmark}}
+\fancyfoot[L]{Dinal Atapattu}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
     \title{
             Queensland University of Technology\\
             \rule{\linewidth}{0.5pt}
@@ -68,20 +77,7 @@
             multithreaded.
             \begin{figure}[H]
                 \centering
-                \begin{tikzpicture}
-                    \draw [fill=blue!20] (0,0) rectangle (4,2);
-                    \draw [->] (4,1) -- (7,1);
-                    \draw [fill=blue!20] (7,0) rectangle (11, 2);
-                    \draw [->] (11,1) -- (14,1);
-                    \draw [fill=blue!20] (14,0) rectangle (18, 2);
-                    \draw [->] (8,0) -- (8,-1) -- (10,-1) -- (10,0);
-                    \node [align=center] at (2,1) {client};
-                    \node [align=center] at (9,1) {server};
-                    \node [align=center] at (16,1) {thread};
-                    \node [align=center] at (5.5, 1.5) {request};
-                    \node [align=center] at (12.5, 1.5) {create new thread\\to service request};
-                    \node [align=center] at (9, -1.5) {resume listening for additional client requests};
-                \end{tikzpicture}
+                \includegraphics{figures/multithreader_server.pdf}
                 \caption{Multithreaded Server Architecture}
             \end{figure}
             Multithreading has the following benefits
@@ -105,27 +101,7 @@
                 to allow parallel execution
                 \begin{figure}[H]
                     \centering
-                    \begin{tikzpicture}
-                        \foreach \x in {1,...,5}
-                        {    
-                            \draw [fill=blue!20] (\x,1.5) rectangle (\x+1,2.5);
-                            \draw [fill=black!20] (\x,0) rectangle (\x+1,1);
-                        }
-                        \draw [->] (1.5,-0.5) -- (5.5,-0.5);
-                        \node [align=center] at (3.5, -0.2) {time};
-                        \node [align=center] at (0, 2) {core 1};
-                        \node [align=center] at (0, 0.5) {core 2};
-                        \node [align=center] at (1.5, 2) {$T_1$};
-                        \node [align=center] at (1.5, 0.5) {$T_2$};
-                        \node [align=center] at (2.5, 2) {$T_3$};
-                        \node [align=center] at (2.5, 0.5) {$T_4$};                        \node [align=center] at (1.5, 2) {$T_1$};
-                        \node [align=center] at (3.5, 2) {$T_1$};
-                        \node [align=center] at (3.5, 0.5) {$T_2$};  
-                        \node [align=center] at (4.5, 2) {$T_1$};
-                        \node [align=center] at (4.5, 0.5) {$T_2$};
-                        \node [align=center] at (5.5, 2) {$\dots$};
-                        \node [align=center] at (5.5, 0.5) {$\dots$};  
-                    \end{tikzpicture}
+                    \includegraphics{figures/multicore_exec.pdf}
                     \caption{Parallel Execution on a Multicore System}
                 \end{figure}
             In general, five areas present challenges in programming for multicore systems
@@ -144,23 +120,7 @@
                     programmers must ensure that the execution of the tasks is synchronized to accomodate the dependency.
                     \begin{figure}[H]
                         \centering
-                        \begin{tikzpicture}
-                            \draw [fill=black!20] (0,2) rectangle (12,3);
-                            \foreach \x in {0,3,6,9}
-                            {
-                                \draw [fill=black!20] (\x, 5) rectangle (\x+3,6);
-                                \draw [->] (\x+1.5, 5.5) -- (\x+1.5, 4.5);
-                                \draw [fill=blue!20] (\x+0.5,3.5) rectangle (\x+2.5,4.5);
-                         \draw [fill=blue!20] (\x+0.5,1) rectangle (\x+2.5,0);
-                            }
-                            \foreach \x in {0.5,...,3.5}
-                            {
-                                \node at (\x*3, 4) {core};
-                                \node at (\x*3, 0.5) {core};
-                            }
-                            \node [align=center] at (-1, 5) {data\\parallelism};
-                            \node [align=center] at (-1, 1.5) {task\\parallelism};
-                        \end{tikzpicture}
+                        \includegraphics{figures/data_task_parallelism.pdf}
                         \caption{Data and Task Parallism}
                     \end{figure}
                 \item Testing and Debugging
@@ -183,19 +143,8 @@
                 Data and Task parallelism may be done together, in a hybrid solution.
                 \begin{figure}[H]
                     \centering
-                    \begin{tikzpicture}
-                        \draw [fill=black!20] (0,2) rectangle (4,4);
-                        \draw [fill=black!20] (0,0) rectangle (4,2);
-                        \foreach \x in {1,...,3}
-                        {
-                            \draw[fill=blue!20, decorate,decoration={coil,aspect=0}] (\x,0.5) -- (\x,1.5);
-                            \draw[fill=blue!20, decorate,decoration={coil,aspect=0}] (\x,2.5) -- (\x,3.5);
-                        }
-                        \node [below] at (2,4) {user threads};
-                        \node [above] at (2,0) {kernel threads};
-                        \node [align=center, left] at (5,3) {user\\space};
-                        \node [align=center, left] at (5.1,1) {kernel\\space};
-                    \end{tikzpicture}
+                    \includegraphics{figures/data_spaces.pdf}
+                    \caption{Use and Kernel Data Spaces}
                 \end{figure}
         \section{Multithreading Models}
             \subsection{Many-To-One Model}
@@ -210,21 +159,7 @@
                 \end{itemize}
                 \begin{figure}[H]
                     \centering
-                    \begin{tikzpicture}
-                        \draw [fill=black!20] (0,1) rectangle (5,3);
-                        \draw [fill=black!20] (0,3) rectangle (5,5);
-                        \foreach \x in {1,...,4}
-                        {
-                            \draw[fill=blue!20, decorate, decoration={coil,aspect=0}] (\x,4.5) -- (\x,3.5);
-                            \draw (\x,3.4) -- (2.5,3);
-                        }
-                        \draw (2.5, 3) -- (2.5,2.5);
-                        \draw[fill=blue!20, decorate, decoration={coil,aspect=0}] (2.5, 2.5) -- (2.5, 1.5);
-                        \node [above] at (2.5,4.5) {user threads};
-                        \node [above] at (2.5,1) {kernel threads};
-                        \node [left, align=center] at (6,4) {user\\space};
-                        \node [left, align=center] at (6.1,2) {kernel\\space};
-                    \end{tikzpicture}
+                    \includegraphics{figures/many_to_one.pdf}
                     \caption{Many-to-one model}
                 \end{figure}
             \subsection{One-To-One Model}
@@ -240,20 +175,7 @@
                 \end{itemize}
                 \begin{figure}[H]
                     \centering
-                    \begin{tikzpicture}
-                        \draw [fill=black!20] (0.5,0.5) rectangle (4.5,2.5);
-                        \draw [fill=black!20] (0.5,2.5) rectangle (4.5,4.5);
-                        \foreach \x in {1,...,4}
-                        {
-                            \draw[fill=blue!20, decorate, decoration={coil,aspect=0}] (\x,1) -- (\x,2);
-                            \draw[fill=blue!20, decorate, decoration={coil,aspect=0}] (\x,3) -- (\x,4);
-                            \draw (\x,2.25) -- (\x,2.75);
-                        }
-                        \node [below, align=center] at (2.5,1) {kernel threads};
-                        \node [above, align=center] at (2.5,4) {user threads};
-                        \node [left, align=left] at (5.5,3.5) {user\\space};
-                        \node [left, align=left] at (5.6,1.5) {kernel\\space};
-                    \end{tikzpicture}
+                    \includegraphics{figures/one_to_one.pdf}
                     \caption{One-to-one model} 
                 \end{figure}
             \subsection{Many-to-many model}
@@ -266,24 +188,7 @@
                 \end{itemize}
                 \begin{figure}[H]
                     \centering
-                    \begin{tikzpicture}
-                        \draw [fill=black!20] (0.5,0.5) rectangle (4.5,2.5);
-                        \draw [fill=black!20] (0.5,2.5) rectangle (4.5,4.5);
-                        \foreach \x in {1,...,4}
-                        {
-                            \draw[fill=blue!20, decorate, decoration={coil,aspect=0}] (\x,3) -- (\x,4);
-                            \draw (\x,3) -- (2.5,2.5);
-                        }
-                        \foreach \x in {1.5,...,3.5}
-                        {
-                            \draw[fill=blue!20, decorate, decoration={coil,aspect=0}] (\x,1) -- (\x,2);
-                            \draw (\x,2.25) -- (2.5,2.5);
-                        }
-                        \node [below, align=center] at (2.5,1) {kernel threads};
-                        \node [above, align=center] at (2.5,4) {user threads};
-                        \node [left, align=left] at (5.5,3.5) {user\\space};
-                        \node [left, align=left] at (5.6,1.5) {kernel\\space};
-                    \end{tikzpicture}
+                    \includegraphics{figures/many_to_many.pdf}
                     \caption{Many-to-many model}
                 \end{figure}
             \subsection{Two-level model}
@@ -297,27 +202,7 @@
                 \end{itemize}
                 \begin{figure}[H]
                     \centering
-                    \begin{tikzpicture}
-                        \draw [fill=black!20] (0.5,0.5) rectangle (5.5,2.5);
-                        \draw [fill=black!20] (0.5,2.5) rectangle (5.5,4.5);
-                        \foreach \x in {1,...,4}
-                        {
-                            \draw[fill=blue!20, decorate, decoration={coil,aspect=0}] (\x,3) -- (\x,4);
-                            \draw (\x,3) -- (2.5,2.5);
-                        }
-                        \foreach \x in {1.5,...,3.5}
-                        {
-                            \draw[fill=blue!20, decorate, decoration={coil,aspect=0}] (\x,1) -- (\x,2);
-                            \draw (\x,2.25) -- (2.5,2.5);
-                        }
-                        \draw[fill=blue!20, decorate, decoration={coil,aspect=0}] (5,3) -- (5,4);
-                        \draw[fill=blue!20, decorate, decoration={coil,aspect=0}] (5,1) -- (5,2);
-                        \draw (5,2.25) -- (5,2.75);
-                        \node [below, align=center] at (2.5,1) {kernel threads};
-                        \node [above, align=center] at (2.5,4) {user threads};
-                        \node [left, align=left] at (6.5,3.5) {user\\space};
-                        \node [left, align=left] at (6.6,1.5) {kernel\\space};
-                    \end{tikzpicture}
+                    \includegraphics{figures/two_level.pdf}
                     \caption{Two-level model}
                 \end{figure}
         \section{Thread Libraries}
@@ -522,25 +407,7 @@ dispatch_async(queue, ^{ printf("I am a block."); });
                 \end{itemize}
                 \begin{figure}[H]
                     \centering
-                    \begin{tikzpicture}
-                        \foreach \y in {0,3}
-                        {
-                            \draw [fill=blue!20, decorate, decoration={coil,aspect=0}] (0,\y) -- (0,\y+1);
-                        }
-                        \foreach \y in {1.1, 2.4}
-                        {
-                            \draw (0,\y) -- (0,\y+0.5);
-                        }
-                        \draw [fill=black!20] (-0.5,1.8) rectangle (0.5,2.3);
-                        \node [align=center] at (0,2.05) {LWP};
-                        \foreach \y in {0.5,2,3.5}
-                        {
-                            \draw [->] (2,\y) -- (1,\y);
-                        }
-                        \node [align=left, right] at (2,0.5) {kernel thread};
-                        \node [align=left, right] at (2,2) {lightweight process};
-                        \node [align=left, right] at (2,3.5) {user thread};
-                    \end{tikzpicture}
+                    \includegraphics{figures/lwp.pdf}
                     \caption{Lightweight Process (LWP)}
                 \end{figure}
     \chapter{Synchronisation}
@@ -665,41 +532,8 @@ dispatch_async(queue, ^{ printf("I am a block."); });
                 site wants to use
             \end{itemize}
             \begin{figure}[H]
-                \def\size{2.6}
                 \centering
-                \begin{tikzpicture}
-                    \coordinate (A) at (-2*\size, 1.5*\size);
-                    \coordinate (B) at (0,0);
-                    \coordinate (C) at (2*\size, 1.5*\size);
-                    \coordinate (N) at (\size*0.75, \size*2);
-                    \coordinate (server) at ($(A) + (\size*0.25, \size*0.35)$);
-                    \coordinate (client) at ($(B) + (\size*0.25, \size*0.35)$);
-                    \draw ($(A) + (\size,0.5*\size)$) -- (N);
-                    \draw ($(B) + (0.75*\size,\size)$) -- (N);
-                    \draw ($(C) + (\size,0.5*\size)$) -- (N);
-                    \draw [fill=blue!20] (N) circle [radius=\size/1.5];
-                    \draw [fill=black!20] (A) rectangle  ++(\size*1.5,\size);
-                    \draw [fill=blue!20] (B) rectangle  ++(\size*1.5,\size);
-                    \draw [fill=white] (C) rectangle  ++(\size*1.5,\size);
-                    \draw [fill=white] (server) rectangle ++(\size*0.25,\size*0.5); 
-                    \draw [fill=white] (client) rectangle ++(\size*0.25,\size*0.5);
-                    \node [below,align=center] at (server) {server};
-                    \node [below,align=center] at (client) {client};
-                    \node at (N) {network};
-                    \draw [<->] ($(client) + (0,\size*0.5)$) -- ($(server) + (\size*0.25,0)$) node [pos=0.45,below,sloped] {communication};
-                    \node [below] at ($(B) + (\size*0.75,0)$) {site B};
-                    \foreach \x in {1,...,4} {
-                        \draw[fill=blue!20] (C) ++(\x*\size/4,\size*0.4) rectangle ++(\size*0.2,\size*0.35);
-                    }
-                    \node [above,align=center] at ($(C) + (\size*0.7,\size*0.2)$) {resources};
-                    \begin{scope}[shift={(\size*1.5/2,\size)}]
-                        \coordinate (A) at (-2*\size, 1.5*\size);
-                        \coordinate (B) at (0,0);
-                        \coordinate (C) at (2*\size, 1.5*\size);
-                        \node [above] at (A) {site A};
-                        \node [above] at (C) {site C};
-                    \end{scope}           
-                \end{tikzpicture}
+                \includegraphics{figures/client_server.pdf}
                 \caption{A client-server distributed system}
             \end{figure}
         \section{Advantages of Distributed Systems}
@@ -745,40 +579,440 @@ dispatch_async(queue, ^{ printf("I am a block."); });
             is extended to all processing cores on the system.\\
             Such scheduling is fundamental to an operating system's functionality. Almost all 
             computer resources are scheduled before use. The CPU, being one of the primary resources
-            of a computer needs special attention during it's scheduling
+            of a computer needs special attention during its scheduling
             \begin{figure}[H]
                 \centering
-                \begin{tikzpicture}
-                    \coordinate (io1) at (0,1.5);
-                    \coordinate (io2) at (0,4.5);
-                    \coordinate (io3) at (0,7.5);
-
-                    \node [align=center] at (0,0) {\textbf{.}\\\textbf{.}\\\textbf{.}};
-                    \draw [fill=black!20] (-1.5,1) rectangle (1.5,2);
-                    \node at (io1) {\textit{wait for I/O}};
-                    \node [align=left] at (0,3) {\textbf{load store}\\\textbf{add store}\\\textbf{read} from file};
-
-                    \draw (-1.5,4) rectangle (1.5,5);
-                    \node at (io2) {\textit{wait for I/O}};
-                    \node [align=left] at (0,6) {\textbf{store increment}\\\textbf{index}\\\textbf{write} to file};
-
-                    \draw [fill=blue!20] (-1.5,7) rectangle (1.5,8);
-                    \node at (io3) {\textit{wait for I/O}};
-                    \node [align=left] at (0,9) {\textbf{load store}\\\textbf{add store}\\\textbf{read} from file};
-
-                    \node [align=center] at (0,11) {\textbf{.}\\\textbf{.}\\\textbf{.}};
-
-                    \foreach \y in {1.5,4.5,7.5} {
-                        \draw[decorate,decoration={brace,amplitude=10pt},shift={(3,0)}] (0.5,\y-0.5) -- (0.5,\y+0.5);
-                        \draw[decorate,decoration={brace,amplitude=10pt},shift={(3,1.5)}] (0.5,\y-1) -- (0.5,\y+1);
-                        \node at (5, \y) {I/O Burst};
-                        \node at (5, \y+1.5) {CPU Burst};
-                    }
-                \end{tikzpicture}
+                \includegraphics[width=0.2\linewidth]{figures/cpu_io_burst.pdf}
                 \caption{Alternating Sequence of CPU and I/O Bursts}
             \end{figure}
-            \subsubsection{CPU-I/O Burst Cycle}
+            % \subsubsection{CPU-I/O Burst Cycle}
+        \section{CPU Scheduler}
+            Whenever the CPU idles, the operating system must select a process in the ready queue to be 
+            executed.\\
+            This is selected by the \textcolor{blue}{CPU Scheduler}. Which selects a process from the processes
+            in memory that are ready to execute, and allocates the CPU to it.\\
+            The \textcolor{blue}{short-term scheduler} seelcts from processes in the ready queue and allocates 
+            the CPU to one of them.\\
+            CPU scheduling happens when
+            \begin{itemize}
+                \item Switching from running to waiting
+                \item Switching from running to ready
+                \item Switching from waiting to ready
+                \item Terminating
+            \end{itemize}
+            \subsection{Preemptive and Non-Preemptive Scheduling}
+                CPU-scheduling decisions may take place under the following four circumstances
+                \begin{enumerate}
+                    \item Process switching from running state to the waiting state (I/O request, wait invocation for Terminating
+                    a child process)
+                    \item Process switching from running to ready state (interrupt)
+                    \item Process switching from waiting to ready (I/O completion, release of a semaphore)
+                    \item Process terminating
+                \end{enumerate}
+                For circumstances 1 and 4, there is no choice in scheduling, a new process (if exists) must be
+                selected for execution. For circumstances 2 and 3, a choice exists.\\
+                Circumstance 1, and 4 are called \textcolor{blue}{non preemptive} or \textcolor{blue}{cooperative}.
+                Otherwise it is \textcolor{blue}{preemptive}.\\
+                \textcolor{blue}{Non-preemptive} scheduling keeps the CPU once the process is allocated till termination
+                or switching to the wait state.
+
+                \subsubsection{Preemptive Scheduling}
+                    Virtually all modern operating systems use preemptive scheduling.\\
+                    However, Preemptive scheduling can result in \textcolor{red}{race conditions} when
+                    data is shared between processes (first process is updating data while the second process
+                    tries to read it, which is in an inconsistent state).\\
+                    Kernel design must be modified to accomodate a preemptive scheduler as race conditions
+                    in updating or modifying important kernel data (IO queues, process table, etc.) while they 
+                    are being read can cause the system to crash.\\
+                    Therefore, a preemptive kernel requires mechanisms such as mutex locks to prevent race conditions
+                    when accessing shared kernel data structues.\\
+                    Most modern operating systems are \textcolor{blue}{full prememptive} when running in kernel mode.
+                \subsubsection{Non Preemptive Scheduling}
+                    Non preemptive scheduling is simpler than preemptive scheduling as there is no need 
+                    for any special hardware or kernel mode privileges.\\
+                    However, non preemptive scheduling is not suitable for modern operating systems as it   
+                    does not allow the kernel to respond to interrupts while running in kernel mode.\\
+                    Non preemptive scheduling is used in embedded systems where the kernel is the only process
+                    running on the system.\\
+                    Non preemptive scheduling is also used in real time systems where the kernel is the only process 
+                    running on the system.\\
+        \section{Dispatcher}
+            Is the module that gives control of the CPU's core to the process selected by the scheduler.
+            Involves
+            \begin{itemize}
+                \item Context switching
+                \item Switching to user model
+                \item Jumping to the proper location in the user program to resume that program
+            \end{itemize}
+            Speed is crucial with the dispatcher as it is invoked during every context switch.\\
+            \textcolor{blue}{Dispatch latency} is the time taken for the dispatcher to stop one process and
+            starty another running.\\
+        \section{Scheduling}
+            Optimisation objectives
+            \begin{itemize}
+                \item Max CPU utilization
+                \item Max throughput
+                \item Min turnaround time
+                \item Min waiting time
+                \item Min response time
+            \end{itemize}
+            \subsection{First-Come, First-Served (FCFS) Scheduling}
+                The process that requests the CPU first is allocated the CPU first.\\
+                Managed using a FIFO queue.\\
+                Given the following process table
+                \begin{figure}[H]
+                    \centering
+                    \begin{subfigure}{0.5\textwidth}
+                        \centering
+                        \begin{tabular}{ccc}
+                            Process & Burst Time & Arrival Time\\
+                            \toprule
+                            P1 & 24 & 0\\
+                            P2 & 3  & 1\\
+                            P3 & 3  & 2\\
+                            \bottomrule
+                        \end{tabular}
+                        \caption{Process Table}
+                    \end{subfigure}%
+                    \begin{subfigure}{0.5\textwidth}
+                        \centering
+                        \includegraphics[width=\linewidth]{figures/fifo_gantt_1.pdf}
+                        \caption{FIFO Gantt Chart}
+                    \end{subfigure}
+                    Waiting time for $P_1$ is 0, $P_2$ is 24, $P_3$ is 27. Average waiting time is 17.
+                    \caption{Process Table and FIFO Gantt Chart with waiting times}
+                \end{figure}
+                \begin{figure}[H]
+                    \centering
+                    \begin{subfigure}{0.5\textwidth}
+                        \centering
+                        \begin{tabular}{ccc}
+                            Process & Burst Time & Arrival Time\\
+                            \toprule
+                            P1 & 24 & 3\\
+                            P2 & 3  & 1\\
+                            P3 & 3  & 2\\
+                            \bottomrule
+                        \end{tabular}
+                        \caption{Process Table}
+                    \end{subfigure}%
+                    \begin{subfigure}{0.5\textwidth}
+                        \centering
+                        \includegraphics[width=\linewidth]{figures/fifo_gantt_2.pdf}
+                        \caption{FIFO Gantt Chart}
+                    \end{subfigure}
+                    Waiting time for $P_1$ is 6, $P_2$ is 0, $P_3$ is 3. Average waiting time is 3.
+                    \caption{Process Table and FIFO Gantt Chart with waiting times}
+                \end{figure}
+            \subsection{Shortest-Job-First (SJF) Scheduling}
+                By associating each process with the length of its next CPU burst, we can schedule the process
+                with the shortest time.\\
+                SJF is optimal, giving the minimum average waiting time for a given set of processes.\\
+                However, knowing the length of the next CPU burst is difficult to predict the length of the next
+                CPU burst.\\
+                \begin{figure}[H]
+                    \centering
+                    \begin{subfigure}{0.5\linewidth}
+                        \centering
+                        \begin{tabular}{cc}
+                            Process & Burst Time\\
+                            \toprule
+                            P1 & 6\\
+                            P2 & 8\\
+                            P3 & 7\\
+                            P4 & 3\\
+                        \end{tabular}
+                        \caption{Process Table}
+                    \end{subfigure}%
+                    \begin{subfigure}{0.5\linewidth}
+                        \centering
+                        \includegraphics[width=\linewidth]{figures/sjf_gantt_1.pdf}
+                        \caption{SJF Gantt Chart}
+                    \end{subfigure}
+                    Average waiting time is 7
+                    \caption{Process Table and SJF Gantt Chart with waiting times}
+                \end{figure}
+                SJF can be either preemptive or non preemptive.\\
+                Preemptive SJF is also called \textcolor{blue}{Shortest Remaining Time First}
+                \begin{figure}[H]
+                    \centering
+                    \begin{subfigure}{0.5\linewidth}
+                        \begin{tabular}{ccc}
+                            Process & Arrival Time & Burst Time\\
+                            \toprule
+                            P1 & 0 & 8\\
+                            P2 & 1 & 4\\
+                            P3 & 2 & 9\\
+                            P4 & 3 & 5\\
+                        \end{tabular}
+                        \caption{Process Table with Arrival Time}
+                    \end{subfigure}%
+                    \begin{subfigure}{0.5\linewidth}
+                        \centering
+                        \includegraphics[width=\linewidth]{figures/srtf_gantt_1.pdf}
+                        \caption{SRTF Gantt Chart}
+                    \end{subfigure}
+                    Average waiting time is 6.5
+                    \caption{Process Table and SRTF Gantt Chart with waiting times}
+                \end{figure}
+            \subsection{Round Robin Scheduling}
+                Each process is given a small unit of CPU time (\textcolor{blue}{time quantum} or \textcolor{blue}{time slice} q) that
+                is 10-100 millisecond.
+                After that time, the process is preempted and added to the end of the ready queue.\\
+                If there are n processes in the ready queue and the time quantum is q, then each process
+                gets 1/n of the CPU time in chunks of at most q time units at once. No process waits more
+                than (n-1)q time units.\\
+                Timer interrupts every quantum to schedule the next process.\\
+                \begin{figure}[H]
+                    \centering
+                    \begin{subfigure}{0.5\linewidth}
+                        \centering
+                        \begin{tabular}{cc}
+                            Process & Burst Time\\
+                            \toprule
+                            P1 & 24\\
+                            P2 & 3\\
+                            P3 & 3\\
+                        \end{tabular}
+                        \caption{Process Table}
+                    \end{subfigure}%
+                    \begin{subfigure}{0.5\linewidth}
+                        \centering
+                        \includegraphics{figures/rr_time_quant_4.pdf}
+                        \caption{Round Robin Gantt Chart}
+                    \end{subfigure}
+                    \caption{Round Robin Gantt Chart with time quantum 4}
+                \end{figure}
+                Typically, round robin has a higher average turnaround than SJF but has better reponse.
     \chapter{Deadlocks}
+        \section{System Model}
+            A system consists of finite resources distributed among a number of competing threads.
+            These resources must be partitioned into several types or classes, each consisting of identical
+            instances.\\
+            Under normal operation, a thread may utilize a resource in the following sequence
+            \begin{enumerate}
+                \item \textbf{Request} - The thread requests the resource. If the request cannot be granted 
+                immediately (for example, if a mutex lock is held by another thread) the requesting thread must
+                wait till it can acquire the resource.
+                \item \textbf{Use} - The thread can operate on the resource (for example, if the resource is a mutex
+                lock, it can access its critical section)
+                \item \textbf{Release} - The thread releases the resource (for example, if the resource is a mutex
+                lock, it releases the lock, allowing another thread to acquire it)
+            \end{enumerate}
+        \section{Deadlock Characterization}
+            Deadlocks can arise if four conditions hold simultaneously
+            \begin{itemize}
+                \item \textbf{Mutual exclusion} - At least one resource must be held in a nonsharable mode;
+                that is, only one thread ata time can use the resource. If another thread requests that resource, 
+                the requesting thread must be delayed until the resource is released.
+                \item \textbf{Hold and Wait} - A thread must be holding at least one resource and waiting to acquire
+                additional resources that are currently being hld by other threads
+                \item \textbf{No Preemption} - Resources cannot be preempted; resources can only be released voluntarily
+                by the thread holding it, after that the thread has completed its task.
+                \item \textbf{Circular Wait} - A set of waiting threads must exist such that $T_0$ is waiting for a 
+                resource held by $T_1$, $T_1$ is waiting for a resource held by $T_2$, ... $T_{n-1}$ is waiting for a 
+                resource held by $T_n$, and $T_n$ is waiting for a resource held by $T_0$.
+            \end{itemize}
+            Note that circular wait implies hold and wait
+        \section{Resource-Allocation Graph}
+            A set of vertices V and a set of edges E.
+            \begin{itemize}
+                \item V is partitioned into two types
+                    \subitem P - Set consisting of all the threads in the system
+                    \subitem R - Set consisting of all resource types in the system
+                \item \textbf{Request edge}
+                    \subitem Directed edge $T_i \rightarrow R_j$
+                \item \textbf{Assignment edge}
+                    \subitem Directed edge $R_j \rightarrow T_i$
+            \end{itemize}
+            \begin{figure}[H]
+                \centering
+                \includegraphics{figures/resource_allocation_graph.pdf}
+                \caption{Resource Allocation Graph}
+            \end{figure}
+            \begin{figure}[H]
+                \centering
+                \begin{subfigure}{0.5\linewidth}
+                        \centering
+                        \includegraphics{figures/deadlock_resource_alloc_graph.pdf}
+                        \caption{Resource Allocation Graph with Deadlock}
+                \end{subfigure}%
+                \begin{subfigure}{0.5\linewidth}
+                        \centering
+                        \includegraphics{figures/no_deadlock_resource_alloc_graph.pdf}
+                        \caption{Resource Allocation Graph without Deadlock}
+                \end{subfigure}
+                \caption{Resource Allocation Graphs}
+            \end{figure}
+            \subsection{Basic Facts}
+                \begin{itemize}
+                    \item If a graph has no cycles there is no deadlock
+                    \item If a graph has a cycle
+                        \subitem If only one instance per resource type, then there's a deadlock
+                        \subitem If several instances per resource type, then deadlock may or may not exist
+                \end{itemize}
+        \section{Methods for Handling Deadlocks}
+            Ensure the system will never enter a deadlock state, or make sure that once a deadlock occurs,
+            it will be recovered from the state. OR ignore the problem and pretend that deadlocks never occur
+            in the system (UNIX, Linux, Windows).\\
+        \section{Deadlock Prevention}
+            Restrain the way requests can be made
+            \begin{itemize}
+                \item \textbf{Mutual Exclusion} - Not required for sharable resources, must hold for nonsharable
+                resources
+                \item \textbf{Hold and Wait} - Must guarantee that whenever a thread requests a resource, it does
+                not hold any other resources
+                    \begin{itemize}
+                        \item Require that each thread request all its resources at one time
+                        \item Require that once a thread holds a resource, it cannot request additional resources
+                        \item Require that once a thread requests a resource, it cannot request additional resources
+                        till the requested resource has been allocated to it
+                    \end{itemize}
+                \item \textbf{No preemption}
+                    \begin{itemize}
+                        \item If a process that is holding some resources requests another resource that cannot immediately
+                        allocated to it, then all resources held must be released.
+                        \item Preempted resources are added to the list of resources for which the process is waiting
+                        \item Process will be restarted only when it can regain old resources, as as the ones requested
+                    \end{itemize}
+                \item \textbf{Circular Wait}
+                    \begin{itemize}
+                        \item Impose a total ordering of all resource types, and require that each thread requests resources
+                        in an increasing order of enumeration
+                    \end{itemize}
+            \end{itemize}
+        \section{Deadlock Avoidance}
+            Requires that the system has some additional \textbf{a priori} information available.\\
+            \begin{itemize}
+                \item Simplest and most useful model requires that each process declare the \textbf{maximum number} of resources
+                of each type it may need
+                \item The deadlock-avoidance algorithm dynamically examines the resource-allocation state to ensure that there can
+                never be a circular-wait condition
+                \item Resource-allocation state is defined by the number of available and allocated resources, and the maximum demands
+                of the processes/threads.
+            \end{itemize}
+            \subsection{Basic Facts}
+                \begin{itemize}
+                    \item If a system is in safe state, no deadlocks
+                    \item If a system is in unsafe state, possibility of deadlock
+                    \item Avoidance, ensure that a system will never enter an unsafe state
+                \end{itemize}
+        \section{Safe State}
+            When a process requests and available resource, the system must decide if immediate allocation leaves the system in 
+            a safe state.\\
+            The system is in a \textbf{safe state} if there exists a sequence of \textbf{ALL} the processes in the system such that
+            for each $P_i$, the resources that $P_i$ can still request can be satisfied by currently available resources + resources 
+            held by all the $P_j$, with $j < i$. i.e.,
+            \begin{itemize}
+                \item If $P_i$ requests a resource, it may have to wait till all the $P_j$ with $j < i$ have finished
+                \item When $P_j$ is finished, $P_i$ can obtain its needed resources, execute, return allocated resources, and terminate
+                \item When $P_i$ terminates, $P_{i+1}$ can obtain its needed resources, and so on
+            \end{itemize}
+        \section{Deadlock Avoidance Algorithms}
+            \subsection{Resource Allocation Graph Scheme}
+                \begin{itemize}
+                    \item \textcolor{blue}{Claim edge} $P_i \rightarrow R_j$ indicated that processes $P_i$ may request resource
+                    $R_j$.
+                    \item Claim edge converts to request edge when a process/thread requests a resource.
+                    \item Request edge converted to an assignment edge when the resource is allocated to the process/thread.
+                    \item When a resource is released by a process, assignment edge reconverts to a claim edge.
+                    \item Resources must be claimed \textit{a priori} in the system.
+                \end{itemize}
+                \begin{figure}[H]
+                    \centering
+                    \begin{subfigure}{0.5\linewidth}
+                        \centering
+                        \includegraphics{figures/resource_allocation_safe.pdf}
+                        \caption{Safe State}
+                    \end{subfigure}%
+                    \begin{subfigure}{0.5\linewidth}
+                        \centering
+                        \includegraphics{figures/resource_allocation_unsafe.pdf}
+                        \caption{Unsafe State}
+                    \end{subfigure}
+                    \caption{Resource Allocation Graphs}
+                \end{figure}
+            The request can be granted only if converting the request edge to an assignment edge does not result 
+            in the formation of a cycle in the resource allocation graph.
+        \section{Banker's Algorithm}
+            Used for multiple instances of resources, where each process must a priori claim the maximum number of resources.
+            When a process requests a resource it may have to wait. When a process gets all of its resources, it must return them
+            in a finite amount of time.
+            \subsection{Data Structures}
+                With n processes and m resource types, the following data structures are used
+                \begin{itemize}
+                    \item \textbf{Available} - Vector of length m. If \textit{available[j]} = k,
+                    there are k instances of resource type $R_j$ available.
+                    \item \textbf{Max} - $n\times m$ matrix. If \textit{Max[i,j]} = k, then process $P_i$ may
+                    request at most k instances of resource type $R_j$.
+                    \item \textbf{Allocation} - $n\times m$ matrix. If \textit{Allocation[i,j]} = k, then
+                    process $P_i$ is currently allocated k instances of $R_j$.
+                    \item \textbf{Need} - $n\times m$ matrix. If \textit{Need[i,j]} = k, then process $P_i$
+                    may need k more instances of $R_j$ to complete its task.
+                \end{itemize}
+                \begin{center}
+                    \textit{Need[i,j]} = \textit{Max[i,j]} - \textit{Allocation[i,j]}
+                \end{center}
+            \subsection{Safety Algorithm}
+                \begin{enumerate}
+                    \item Letting \textbf{Work} and \textbf{Finish} be vectors of length m and n respectively.
+                    \item Initialising \textbf{Work} = \textbf{Available} and \textbf{Finish[i]} = false for $i = 0,1,...,n-1$
+                    \item Find an \textbf{i} such that \textbf{Finish[i] = false} and \textbf{Need$\leq$Work}
+                        \subitem If no such \textbf{i} exists, go to step 4
+                    \item \textbf{Work = Work + Allocation[i]}, \textbf{Finish[i] = true}
+                        \subitem Go to step 2
+                    \item If \textbf{Finish[i] = true} for all \textbf{i}, the system is in a safe state.
+                \end{enumerate}
+            \subsection{Resource-Request Algorithm for Process $P_i$}
+                \textbf{Request[i]} = request vector for process $P_i$. If \textbf{Request[i,j] = k}, then process
+                $P_i$ wants k instances of resource type $R_j$.\\
+                \begin{enumerate}
+                    \item if \textbf{Request[i]} $\leq$ \textbf{Need[i]}, go to step 2. Otherwise, raise error condition
+                    since process has exceeded its maxmimum claim.
+                    \item if \textbf{Request[i]} $\leq$ \textbf{Available}, go to step 3. Otherwise, $P_i$ must wait as
+                    resources are unavailable.
+                    \item Pretend to allocate the requested resources to $P_i$ by modifying the state as follows
+                        \begin{center}
+                            \textbf{Available = Available - Request}\\
+                            \textbf{Allocation[i] = Allocation[i] - Request[i]}\\
+                            \textbf{Need[i] = Need[i] - Request[i]}\\
+                        \end{center}
+                        \begin{itemize}
+                            \item If safe state, then resources will be allocated to $P_i$
+                            \item If unsafe state, $P_i$ must wait, and the old resource-allocation state will be stored
+                        \end{itemize}
+                \end{enumerate}
+            \subsection{Example}
+                Given 4 processes [$P_0, P_1, P_2, P_3, P_4$] and 3 resource types [A (10 instances), B (5 instances), C (7 instances)].\\
+                At time $t_0$, the following snapshot of the system has been taken\\
+                \begin{center}
+                    \begin{tabular}{cccc}
+                        & Allocation & Max & Available\\
+                        \toprule
+                        & A B C & A B C & A B C\\
+                        $P_0$ & 0 1 0 & 7 5 3 & 3 3 2\\
+                        $P_1$ & 2 0 0 & 3 2 2 & \\
+                        $P_2$ & 3 0 2 & 9 0 2 & \\
+                        $P_3$ & 2 1 1 & 2 2 2 & \\
+                        $P_4$ & 0 0 2 & 4 3 3 & \\
+                        \bottomrule
+                    \end{tabular}
+                \end{center}
+                The content of matrix \textbf{Need} is calculated as follows
+                \begin{center}
+                    \begin{tabular}{cccc}
+                        & Allocation & Max & Need\\
+                        \toprule
+                        & A B C & A B C & A B C\\
+                        $P_0$ & 0 1 0 & 7 5 3 & 7 4 3\\
+                        $P_1$ & 2 0 0 & 3 2 2 & 1 2 2\\
+                        $P_2$ & 3 0 2 & 9 0 2 & 6 0 0\\
+                        $P_3$ & 2 1 1 & 2 2 2 & 0 1 1\\
+                        $P_4$ & 0 0 2 & 4 3 3 & 4 3 1\\
+                        \bottomrule
+                    \end{tabular}
+                \end{center}
+                This system is in a safe state since the sequence $<$ $P_1$, $P_3$, $P_4$, $P_0$, $P_2$ $>$ satisfies the safety algorithm.\\
     \chapter{Virtual Machines}
         \section{Benefits and Features}
             \begin{itemize}
@@ -810,6 +1044,7 @@ dispatch_async(queue, ^{ printf("I am a block."); });
                         \item Partitions, Domains
                     \end{itemize}
                 Hardware features must be implemented in firemware, the VMM is in firmware. Smaller feature set than other types
+    \listoffigures
     \chapter{Practicals}
         \section{Introduction to Operating Systems}
         \section{Operating System Structures}
