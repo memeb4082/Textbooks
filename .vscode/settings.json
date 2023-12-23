@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "*.latexmkrc": "c"
+    },
+    "files.exclude": {
+        "**/*.aux": true,
+        "**/*.log": true,
+        "**/*.out": true,
+        "**/*.toc": true,
+        "**/*.gz": true,
+        "**/*.fdb_latexmk": true,
+        "**/*.fls": true,
+        "**/*.synctex.gz": true,
+        "build/": true  // Assuming you store build files in a directory named 'build'
+    },
+    "explorer.sortOrder": "type",
+    "discord.enabled": true // easier to deal with tex and pdf seperate
+}

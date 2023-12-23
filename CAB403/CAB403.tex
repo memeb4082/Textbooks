@@ -13,13 +13,16 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{booktabs}
+\usepackage{listings}
 \usepackage[hidelinks]{hyperref}
 \geometry{
-    left=10mm,
-    right=10mm,
-    top=12mm,
-    bottom=12mm,
+    left=20mm,
+    right=20mm,
+    top=20mm,
+    bottom=20mm,
 }
+\setcounter{secnumdepth}{6}
+\setcounter{tocdepth}{5}
 \begin{document}
 \pagestyle{fancy}
     \fancyhf{}
@@ -63,6 +66,71 @@
                 \end{itemize}
     \chapter{Operating System Structures}
     \chapter{Processes}
+        Batch systems define a \textcolor{blue}{job} as a program and its data, and a time-shared system defines a \textcolor{blue}{task or user program}
+        as the unit of work.\\
+        Processes are programs in execution. The status of the current activity of a process is represented by the value of 
+        the \textcolor{blue}{program counter} and the processor's registers. Programs are passive entities that are stored entirely in
+        disk (\textcolor{blue}{executable fil}), programs become processses when the executable is loaded into memory.\\
+        The memory layout of a process is divided into multiple sections, including
+        \begin{itemize}
+            \item \textbf{Text Section} - The program code
+            \item \textbf{Data Section} - Global variables
+            \item \textbf{Heap} - Dynamically allocated memory during runtime
+            \item \textbf{Stack} - Temporary data such as function parameters, return addresses, and local variables
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.2\linewidth]{figures/process_layout.png}
+            \caption{Process Layout in Memory}
+        \end{figure}
+        The text and data sections are fixed size, while the heap and stack can change dynamically during runtime.
+        Each time a function is called, an \textcolor{blue}{activation record} containing function parameters, local variables,
+        and return address is pushed to the stack; when control is returned, the activation record is popped from the stack.
+        While the heap and stack grow \textit{toward} each other, they are not allowed to collide (\textit{overlap}).\\
+        \section{Process State}
+            As a process executes, it changes \textcolor{blue}{state}. The state of a process is defined partly by the current 
+            activity of the process. A process may be in one of the following states
+            \begin{itemize}
+                \item \textbf{New} - The process is being created
+                \item \textbf{Running} - Instructions are being executed
+                \item \textbf{Waiting} - The process is waiting for some event to occur (I/O completion, signal)
+                \item \textbf{Ready} - The process is waiting to be assigned to a processor
+                \item \textbf{Terminated} - The process has finished execution
+            \end{itemize}
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.6\linewidth]{figures/process_state.png}
+                \caption{Process State Diagram}
+            \end{figure}
+            Only one process can be \textit{running} on any processor at any instant. Many processes may be \textit{ready} and \textit{waiting}.
+        \section{Process Control Block}
+            Each process is represented in the operting system by a \textcolor{blue}{process control block (PCB)} - also called a \textcolor{blue}{process control block},
+            also called a \textcolor{blue}{task control block}.\\
+            It contains many pieces of information associated with a specific process, including;
+            \begin{itemize}
+                \item \textbf{Process State} - New, Ready, Running, Waiting, Halted, Terminated, etc.
+                \item \textbf{Program Counter} - Address of the next instruction to be executed for the process
+                \item \textbf{CPU Registers} - Contents of all process-centric registers, these reisters vary from machine to machine and architecture to architecture. They include accumulators, index registers, stack pointers, and general-purpose registers, plus any condition code information. This state information must be saved along with the program counter when an interrupt occurs in order to allow the process to continue correctly after it is rescheduled to run
+                \item \textbf{CPU Scheduling Information} - Process priority, pointers to scheduling queues, any other scheduling parameters
+                \item \textbf{Memory Management Information} - Base and limit registers, page tables or segment tables, depending on the memory system used by the operating system. Depends on the memory system used by the operating system
+                \item \textbf{Accounting Information} - Amount of CPU and real time used, time limits, account numbers, job or process numbers, etc.
+                \item \textbf{I/O Status Information} - I/O Devices allocated to the process, list of open files, etc.
+            \end{itemize}
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.2\linewidth]{figures/process_control_block.png}
+                \caption{Process Control Block (PCB)}
+            \end{figure}
+        \section{Threads}
+            In the process model, a process is a program that performs a single thread of exeuction. 
+            A \textcolor{blue}{thread} is a basic unit of CPU utilization, consisting of a program counter,
+            a stack, and a set of registers, and a thread ID. It shares with other threads belonging to the same
+            process its code section, data section, and other operating-system resources, such as open files and signals.\\
+            Modern operating systems have extended the process concept to allow a process on multiple threads of execution, allowing to perform more than one task at a time which is beneficial for multicore systems, where multiple threads can run in parallel. A multithreaded word process for example could, manage user input on one thread while another runs the spell checker.\\
+            The PCB is expanded in these systems to include information for each thread, such as the thread ID, register set, and stack pointer, but the remaining information is shared among the threads within the same process.
+        \section{Process Scheduling}
+            The objective of multiprogramming is to have a process running at all times in order to maximize CPU utilization. The objective of time sharing is to switch the CPU among processes so frequently that users can interact with each program while it is running.\\
+            These objectives are met using a \textcolor{blue}{process scheduler}, which selects an available process for program execution on a core. Each CPU core can run one process at a time.
     \chapter{Threads}
             A thread is a fundamental unit of CPU utilization, which forms the basis of multithreaded computer systems.
             Many modern applications are multithreaded, with threads running within an application. An application can divide tasks to seperate threads
@@ -262,7 +330,7 @@
                     \end{minted}
                     \caption{Thread pooling in the Windows API}
                 \end{figure}
-            \subsection*{OpenMP}
+            \subsection{OpenMP}
                 Set of compiler directives and an API for C, C++, FORTRAN.\\
                 Provides support for parallel programming and shared-memory environments.\\
                 Identifies \textcolor{blue}{parallel regions} - blocks of code that can run in parallel.\\
@@ -930,7 +998,7 @@ dispatch_async(queue, ^{ printf("I am a block."); });
                         \includegraphics{figures/resource_allocation_unsafe.pdf}
                         \caption{Unsafe State}
                     \end{subfigure}
-                    \caption{Resource Allocation Graphs}
+                    \caption{Resource Allocation Graph States}
                 \end{figure}
             The request can be granted only if converting the request edge to an assignment edge does not result 
             in the formation of a cycle in the resource allocation graph.
@@ -1013,59 +1081,453 @@ dispatch_async(queue, ^{ printf("I am a block."); });
                     \end{tabular}
                 \end{center}
                 This system is in a safe state since the sequence $<$ $P_1$, $P_3$, $P_4$, $P_0$, $P_2$ $>$ satisfies the safety algorithm.\\
-    \chapter{Virtual Machines}
-        \section{Benefits and Features}
-            \begin{itemize}
-                \item Templating - create an OS + application VM, provide it to customers, use it to create multiple instances
-                    \subitem Docker containers, AWS AMIs, etc.
-                \item Live Migration - Move a running VM from host to another
-                    \subitem No interruption of user access
-                \item All these features together $\Longrightarrow$ \textcolor{blue}{cloud computing}
-                    \subitem Using APIs, programs tell cloud infrastructure (servers, networking, storage) to create new guests, VMs, virtual desktops
-            \end{itemize}
-        \section{Types of Virtual Machines}
-            Many variations as well as hardware details, assiming VMMs take advantage of hardware features, they can simplify implementation and improve performance
-            All Virtual Machines have a \textcolor{blue}{lifecycle}
-            \begin{itemize}
-                \item Created by the VMM
-                \item Resources assigned to it (cores, amount of memory, networking details, storage details)
-                \item In type 0 hypervisor, resources are usually dedicated
-                \item Other types dedicate or share resource (or mix)
-                \item When no longer needed, VMs can be deleted, freeing resources
-            \end{itemize}
-            Steps are simpler and faster than a physical machine install
-            \begin{itemize}
-                \item Can lead to \textcolor{blue}{VM sprawl} with lots of VMs, history and state are difficult to track
-            \end{itemize}
-        \section{Types of VMs}
-            \subsection{Type 0 Hypervisor}
-                Is an older idea under many names by hardware manufacturers
+    \chapter{File Systems and Protection}
+        \section{Protection}
+            \subsection{Goals of Protection}
+                In one protection model, the computer consists of a collection of objects, hardware and/or software, where each object has a unique
+                name and can be accessed through a well-defined set of operations.\\
+                The protection problem is to ensure that each object is accessed correctly and only by the processes that are allowed to do so.
+            \subsection{Principles of Protection}
+                The guiding principle of protection is the \textcolor{blue}{principle of least privilege}, where;
+                \begin{itemize}
+                    \item Programs, users, and systems should be given just enough the privileges to perform their tasks
+                    \item Limits damage if process is compromised
+                    \item Can be static (during system or process lifetime) or dynamic (changed by process as needed) \textcolor{blue}{domain switching,
+                    privilege escalation}
+                    \item "Need to know" is a similar concept regarding access to data.
+                \end{itemize}
+                The \textcolor{blue}{grain} aspect
+                \begin{itemize}
+                    \item Rough-grained privilege management - easier, simpler, but less privilege levels as they are done in chunks
+                        \subitem Processes either have all privileges of user or of root
+                    \item Fine-grained management - more complex, more overhead, but more stringent and protective
+                        \subitem File ACL Lists, RBAC
+                \end{itemize}
+            \subsection{Domain of Protection}
+                Protection rings seperate functions into domains and order them hierarchically. A generalization of rings is using 
+                domains without a hierarchy.\\
+                A computer system can be treated as a collection of processes and objects.\\
+                Objects in this context can be hardware or software entities.\\
+                \subsubsection{Domain Structure}
+                    In order to facilitate this scheme, a process may operate within a \textcolor{blue}{protection domain} which 
+                    specifices the resources that the process may access.\\
+                    Each domain defines a set of objects and the types of operations that may be invoked.\\
+                    The ability to execute an operation on an object is an \textcolor{blue}{access right}.\\
+                    A domain is a collection of access rights, each an ordered pair
+                    \begin{center}
+                        \textbf{(object, set of operations)}
+                    \end{center}
+                    For example, if domain $D_1$ has access rights \textbf{(file \textit{F}, read, write)}, then process $P_1$ in domain $D_1$
+                    may read and write \textit{F}.\\
+                    Domains may share access rights as well, for example, if domain $D_2$ has access rights \textbf{(file \textit{F}, read)},
+                    then process $P_2$ in domain $D_2$ may read \textit{F}.\\ 
+                    The association between a process and a domian may be either \textcolor{blue}{static} or \textcolor{blue}{dynamic}.\\
+                    Establishing dynamic protection domains is more complex as it involves \textcolor{blue}{domain switching}, where 
+                    the process switches from one domain to another.\\
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[width=0.6\linewidth]{figures/protection_domains_3.png}
+                        \caption{System with three protection domains}
+                    \end{figure}
+                    Domains can be realised in multiple ways
+                    \begin{enumerate}
+                        \item Each \textit{user} may be a domain. In this case, the set of objects that can be accessed depends on the identity of the 
+                        user. Domain switching occurs when the user is changed (login, su, etc.)
+                        \item Each \textit{process} may be a domain. In this case the set of objects that can be accessed depends on the identity of the
+                        process. Domain switching occurs when one process sends a message to another process and waits for a response.
+                        \item Each \textit{procedure} may be a domain. In this case the set of objects that can be accessed corresponds to the local variables
+                        defined within the procedure. Domain switching occurs when a procedure is called.
+                    \end{enumerate}
+            \subsection{Access Matrix}
+                The general model of protection can be viewed abstractly as a matrix, called an \textcolor{blue}{access matrix}. \\
+                Rows represent domains, and columns represent objects.\\
+                Each entry contains a set of access rights where the entry \texttt{access}(\textit{i,j}) defines the set of operations 
+                that a process in domain $D_i$ can invoke on object $O_j$.\\
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=0.6\linewidth]{figures/access_matrix.png}
+                    \caption{Access Matrix}
+                \end{figure}
+                The creator of the object dictates the access column for the object.\\
+                Can be expanded to dynamic protection
+                \begin{itemize}
+                    \item Operations to add, delete rights (columns)
+                    \item Special access rights\\
+                    \begin{tabular}{ll}
+                        -- Owner & of $O_i$ \\
+                        -- Copy op & from $O_i$ to $O_j$ (denoted by *) \\
+                        -- Control & $D_i$ can modify $D_j$ access rights \\
+                        -- Transfer & switch domain from $D_i$ to $D_j$ \\
+                    \end{tabular}
+                \end{itemize}
+                Note that copy and owner are applicable to an object while control and transfer are applicable to a domain.\\
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=0.6\linewidth]{figures/access_matrix_domobj.png}
+                    \caption{Access Matrix with Domains as Objects}
+                \end{figure}
+                This has the two variants;
+                \begin{itemize}
+                    \item A right is copied from \texttt{access}(\textit{i,j}) to \texttt{access}(\textit{k,j}).
+                    It is then removed from from \texttt{access}(\textit{i,j}). Therefore, is a transfer not a copy.
+                    \item Propogation of \texttt{copy} right may be limited. That is, when the right \textit{R*} is
+                    copied from \texttt{access}(\textit{i,j}) to \texttt{access}(\textit{k,j}), only the right 
+                    \textit{R} (not \textit{R*}) is created. A process executing in domain $D_k$ cannot further copy the right \textit{R}.
+                \end{itemize}
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=0.4\linewidth]{figures/access_matrix_copy_1.png}%
+                    \includegraphics[width=0.4\linewidth]{figures/access_matrix_copy_2.png}
+                    \caption{Access Matrix with Copy Rights}
+                \end{figure}
+            \subsection{Access Control}
+                Protection can also be applied to non file resources.\\
+                Oracle Solaris 10 provides \textcolor{blue}{role-based access control} (\textcolor{blue}{RBAC})
+                to implement least privilege.\\
+                \begin{itemize}
+                    \item \textbf{Privilege} is the right to execute a system call or use an option within a system call
+                    \item Can be assigned to processes
+                    \item Users assigned \textbf{roles} granting access to privileges and programs
+                        \subitem Enable role via password to gain privileges
+                    \item Similar to an access matrix
+                \end{itemize}
+        \section{File System Interface}
+            \subsection{File Concept}
+                A file is a named collection of related information that is recorded on secondary storage.
+                A logical storage unit that is independent from the physical properties of its storage device.
+                From a user's perspective, a file is the smallest allotment of logical secondary storage (data cannot
+                be written to secondary storage unless they are within a file).\\
+                File types include
+                \begin{itemize}
+                    \item Data
+                        \begin{itemize}
+                            \item Numeric
+                            \item Character
+                            \item Binary
+                        \end{itemize}
+                    \item Program
+                \end{itemize}
+                Some files (plain text) do not have formatting while some do.\\
+                In general, a file is a sequence of bits, bytes, lines, or records
+                \subsubsection{File Attributes}
+                    File attributes vary between operating systems, but in general consist of 
                     \begin{itemize}
-                        \item Partitions, Domains
+                        \item \textbf{Name} - only information that is kept in human readable form
+                        \item \textbf{Identifier} - unique tag (number) that identifies file within system
+                        \item \textbf{Type} - needed for systems that support different types
+                        \item \textbf{Location} - pointer to file location on device
+                        \item \textbf{Size} - current size
+                        \item \textbf{Protection} - controls read, write and execute privileges
+                        \item \textbf{Time, data, and user identification} - data for protection, security, and usage monitoring
                     \end{itemize}
-                Hardware features must be implemented in firemware, the VMM is in firmware. Smaller feature set than other types
+                    Information about files are kept in the directory structure, which is maintained on secondary storage.
+                \subsubsection{File Operations}
+                    Files are an \textbf{abstract data type} with the following defined operations
+                    \begin{itemize}
+                        \item \textbf{Create}
+                            \subitem Find space in the file system and then add an entry of the new file into the directory.
+                        \item \textbf{Write}
+                            \subitem The file system searches the directory to find the file's writing location, writes to that location,
+                            then updates the write pointer.
+                        \item \textbf{Read}
+                            \subitem The file system searches the directory to find the file's read location, reads from that
+                            location and then updates the read pointer.
+                        \item \textbf{Reposition}
+                            \subitem The file system searches the directory to find the file's location, then updates the read
+                            and write pointers.
+                        \item \textbf{Delete}
+                            \subitem The file system searches the directory to find the file's location, then removes the file 
+                            from the directory and marks the space as available.
+                        \item \textbf{Truncate}
+                            \subitem The file system searches the directory to find the file's location, then removes the file 
+                            from the directory and marks the space as available. The file system then updates the file's size 
+                            attribute.
+                    \end{itemize}
+                    These primitive operatiosn can then be combined to perform other file operations (can create a file copy operation
+                    by creating a new file and then reading from the old and writing to the new)
+                    \begin{itemize}
+                        \item \textbf{Open}$(F_i)$ 
+                            \subitem Searches the directroy structure on disk for entry $F_i$ and moves the content of the entry 
+                            into internal system table. The entry contains information about the location of the file, its size, 
+                            and other attributes. The system also allocates resources to manage the open file table. 
+                        \item \textbf{Close}$(F_i)$
+                            \subitem Writes any cached information belonging to $F_i$ to disk, removes $F_i$ from the open file table, 
+                            and frees up any table space allocated to $F_i$ in the system.
+                    \end{itemize}
+                \subsubsection{Open Files}
+                    Several pieces of data are needed to manage open files
+                    \begin{itemize}
+                        \item \textbf{Open-file table}
+                            \subitem Tracks open files
+                        \item \textbf{File pointer}
+                            \subitem Pointer to last read/write location, per process that has the file open
+                        \item \textbf{File-open count}
+                            \subitem Counter of the number of times a file is open to allow removal of data from the open-file table
+                            when the last process closes it
+                        \item \textbf{Disk location}
+                            \subitem Cache of data access information
+                        \item \textbf{Access rights}
+                            \subitem Per process access mode information
+                    \end{itemize}
+                \subsubsection{Open File Locking}
+                    Provied by some operating systems and file systems and is similar to reader-writer locks
+                    \begin{itemize}
+                        \item \textbf{Shared lock}
+                            \subitem Similar to a reader lock. Several processes can acquire concurrently
+                        \item \textbf{Exclusive lock}
+                            \subitem Similar to a writer lock. Only one process can acquire at a time
+                    \end{itemize}
+                    Mandatory or Advisory
+                    \begin{itemize}
+                        \item \textbf{Mandatory}
+                            \subitem Access is denied depending on the locks held and requested
+                        \item \textbf{Advisory}
+                            \subitem Processes can find status of locks and decide what to do
+                    \end{itemize}
+                \subsubsection{File Structure}
+                    File types can be used to indicate the internal structure of a file where an empty type
+                    menas a sequence of words/bytes.\\
+                    Simple record structure
+                    \begin{itemize}
+                        \item Lines
+                        \item Fixed length
+                        \item Variable length
+                    \end{itemize}
+                    Complex structures
+                    \begin{itemize}
+                        \item Formatted document
+                        \item Relocatable load file
+                    \end{itemize}
+                    If the operating system suports a file type, it needs to contain the code to support that file structure.
+                    Some operating systems (Unix, Windows) impose a minimal number of structures.
+                    \subitem Example: Unix considers each file to be a sequence of 8-bit types. No interpretation for these 
+                    8 bits
+            \subsection{Access Methods}
+                \begin{itemize}
+                    \item \textbf{Sequential Access}
+                    % bold listing
+                    \begin{minted}{c}
+                        read_next(record);
+                        write_next(record);
+                        reset(); /* Move the file pointer to the beginning of the file */ 
+                    \end{minted}
+                    \item \textbf{Direct Access}
+                    \begin{minted}{c}
+                        read(n);
+                        write(n);
+                        position_to(n); /* Move the file pointer to the nth record */
+                        read_next();
+                        write_next();
+                    \end{minted}
+                    n = \textcolor{blue}{relative block number}
+                \end{itemize}
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=0.6\linewidth]{figures/sequential_access.png}
+                    \caption{Sequential Access}
+                \end{figure}
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=0.6\linewidth]{figures/sequential_access_sim.png}
+                    \caption{Simulation of sequential access on a direct access file}
+                \end{figure}
+                \subsubsection{Other Access Methods}
+                    Access methods can be built on top of the direct access method, generally involving the creation of 
+                    an \textcolor{blue}{index} for the file. Keeping the index in memory can speed up locating data to be operating
+                    on (UP code + record of data about that item). Alternatively, index (in memory) or index (on disk) if
+                    space constraints arise.\\
+                    IBM Indexed Sequential Access Method (ISAM)\\
+                    \begin{itemize}
+                        \item Small master index which points to disk blocks of secondary index
+                        \item Files are kept sorted on a defined key
+                        \item All managed on the operating system
+                    \end{itemize}
+                    VMS operating system provides index and relative files.
+                    \begin{figure}
+                        \centering
+                        \includegraphics[width=0.6\linewidth]{figures/index_and_relative_files.png}
+                    \end{figure}
+            \subsection{File-Systems}
+                \subsubsection{Directory Structure}
+                        Is a collection of nodes containing information about all the files.\\
+                        \begin{figure}[H]
+                            \centering
+                            \includegraphics[width=0.6\linewidth]{figures/directory_structure.png}
+                            \caption{Directory Structure}
+                        \end{figure}
+                    \subsubsection{Disk Structure}
+                        Disks, can be divided into \textcolor{blue}{partitions}, which can be \textcolor{blue}{RAID}
+                        (Redundant Array of Independent Disks) protected against a failure. They can also be used raw,
+                        without a file system/not formatting with a file system. Partitions are also called \textcolor{blue}{minidisks, slices}.
+                        An entity containing a file system is also called a \textcolor{blue}{volume}, where each volute containing file
+                        system also tracks that file system's information in the \textcolor{blue}{device directory} or
+                        \textcolor{blue}{volume table of contents}.\\
+                        There are special purpose and general purpose file systems.\\
+                        Frequently within the same operating system.
+                    \subsubsection{Types of File Systems}
+                        While we focus on general purpose file systems, there are special file systems used by operating systems
+                        as well. For example, with Solaris:
+                        \begin{itemize}
+                            \item tmpfs
+                                \subitem Temporary file system in memory, volatile and fast
+                            \item objfs
+                                \subitem Interface into kernel memory to get kernel symbols for debugging
+                            \item ctfs
+                                \subitem Contract file system for managing daemons
+                            \item lofs
+                                \subitem Loopback file system allowing one filesystem to be accessed in place of another
+                            \item procfs
+                                \subitem Kernel interface to process structures
+                            \item ufs, zfs
+                                \subitem General purpose file systems
+                        \end{itemize}
+                    \subsubsection{File System Mounting}
+                        A file system must be mounted before being accessed.\\
+                        An unmounted file system is mounted at the mount point
+                        \begin{figure}[H]
+                            \centering
+                            \begin{subfigure}{0.5\linewidth}
+                                \centering
+                                \includegraphics[width=0.6\linewidth]{figures/existing_system.png}
+                                \caption{Existing System}
+                            \end{subfigure}%
+                            \begin{subfigure}{0.5\linewidth}
+                                \centering
+                                \includegraphics[width=0.6\linewidth]{figures/unmounted_volume.png}
+                                \caption{Unmounted Volume}
+                            \end{subfigure}
+                            \caption{File System Mounting}
+                        \end{figure}
+                        \begin{figure}[H]
+                            \centering
+                            \includegraphics[width=0.3\linewidth]{figures/mounted_volume.png}
+                            \caption{Mounted Volume at /users}
+                        \end{figure}
+                \subsection{Directory Structures}
+                    \subsubsection{Operations Performed on Directory}
+                            A diretory can be viewed as a data structure that stores information about the files in the directory.
+                            The operations that can be performed on a directory are
+                            \begin{itemize}
+                                \item Search for a file
+                                \item Create a file
+                                \item Delete a file
+                                \item List a directory
+                                \item Rename a file
+                                \item Traverse the file system
+                            \end{itemize}
+                    \subsubsection{Single-Level Directory}
+                        Simplest directory structure, where a single directory contains all the files on the disk.\\
+                        \begin{figure}[H]
+                            \centering
+                            \includegraphics[width=0.6\linewidth]{figures/single_level_dir.png}
+                            \caption{Single-Level Directory}
+                        \end{figure}
+                    \subsubsection{Two-Level Directory}
+                        Seperate directory for each user (\textcolor{blue}{user file directory UFD}) and one directory for all users
+                        (\textcolor{blue}{master file directory MFD}).\\
+                        \begin{figure}[H]
+                            \centering
+                            \includegraphics[width=0.6\linewidth]{figures/two_level_dir.png}
+                            \caption{Two-Level Directory}
+                        \end{figure}
+                    \subsubsection{Tree-Structured Directory}
+                        \begin{figure}[H]
+                            \centering
+                            \includegraphics[width=0.6\linewidth]{figures/tree_dir.png}
+                            \caption{Tree-Structured Directory}
+                        \end{figure}
+                    \subsubsection{Acyclic Graph Directory}
+                        \begin{figure}[H]
+                            \centering
+                            \includegraphics[width=0.6\linewidth]{figures/acyclic_graph_dir.png}
+                            \caption{Acyclic Graph Directory}
+                        \end{figure}
+                    \subsubsection{General Graph Directory}
+                        \begin{figure}[H]
+                            \centering
+                            \includegraphics[width=0.6\linewidth]{figures/general_graph_dir.png}
+                            \caption{General Graph Directory}
+                        \end{figure}
+                        
+            % \subsection{File Sharing}
+            \subsection{Protection}
+                File owner/creator must be able to control what can be done and by whom.\\
+                The following types of access have been defined for files
+                \begin{itemize}
+                    \item \textbf{Read}
+                    \item \textbf{Write}
+                    \item \textbf{Execute}
+                    \item \textbf{Append}
+                    \item \textbf{Delete}
+                    \item \textbf{List}
+                \end{itemize}
+            \subsection{Access Lists and Groups}
+                Modes of access: \textcolor{blue}{read, write, execute}.\\
+                Three user classes in Unix
+                \begin{figure}[H]
+                    \centering
+                    \begin{tabular}{ccc}
+                        \textbf{User} & \textbf{Group ID} & \textbf{rwx} \\
+                        \toprule
+                        Owner & 7 & 111 \\
+                        Group & 6 & 110 \\
+                        Public & 1 & 001 \\
+                    \end{tabular}
+                    \caption{Unix Access Classes}
+                \end{figure}
+        % \section{File System Implementation}
+        %     \subsection{File System Implementation}
+        %     \subsection{Directory Implementation}
+        %     \subsection{Allocation Methods}
+        %     \subsection{Free-Space Management}
+    \chapter{Virtual Machines}
+        Virtual machines abstract the hardware of a single computer (CPU, memory, disk drives, network interface cards, etc.)
+        into several execution environments, creating the illusion that each environment is running on its own computer.
+        Virtualization creates a layer on which the operating system/applications can run.\\
+        Virtual machine implmentations involve seperate components
+        \begin{itemize}
+            \item \textbf{Host} - the underlying hardware that runs the virtual machine
+            \item \textbf{Virtual Machine Manager (VMM/Hypervisor)} - software that creates and runs 
+            virtual machines by providing an interface identical to the host
+            \item \textbf{Guest} - the operating system and/or applications running on the hypervisor
+        \end{itemize}
+        \section{Hypervisor}
+            \subsection{Type 0 Hypervisor}
+                Is an older idea with many names, including \textbf{bare metal}, \textbf{native}, \textbf{embedded}, \textbf{domains},
+                and \textbf{partitions}.\\
+                Hardware features are implemented by firmware. The hypervisor is the first software to run on the hardware and the operating
+                system requires no modifications.\\
+                Limited feature set but high performance as each guest gets dedicated hardware.\\
+                I/O is difficult as the hypervisor must implement all drivers.\\
+                VMM implements a \textcolor{blue}{control partition} that runs daeomsn that other guests communicate
+                with for shared I/O.\\
+                Allows for nesting virtualization, where a guest can run its own hypervisor and create its own guests.
+            \subsection{Type 1 Hypervisor}
+                Common in datacenters and cloud computing.\\
+                Datacenter managers control and manage operating systems in new, sophisticated ways by controlling the Type 1
+                hypervisor.\\
+                Consolidation of multiple operating systems and apps onto less hardware.\\
+                Move guests between systems to balance performance.\\
+                Allows for snapshots and cloning.\\
+                Rn in kernel mode, taking advantage of hardware protection. WHere the host CPU allows, they 
+                use multiple modes to give the guest operating system individual control and improved performance.
+                They are also operating systems of their own, and therefore have their own CPU scheduling,
+                memory management, and I/O subsystems.\\
+                Commonly closed source offerings (VMware ESX, Microsoft Hyper-V, Citrix XenServer)\\
+                These can run on Type 0 hypervisors but not on other Type 1 hypervisors.\\
+            \subsection{Type 2 Hypervisor}
+                These are less interesting from an operating system's perspective as there is little involvement 
+                in these.\\
+                Run in the application level as VMMs and are simplyu another process that is run and managed by the host.\\
+                The host is unaware that there is a VMM running.\\
+                Have limits not associated with other types such as requiring superuser/administrator to access hardware assistance
+                features of modern CPUs and cannot use these features if not given these permissions and have extra overhead
+                of running.\\
+                Have the benefit of being able to run on any host operating system and therefore can be used to test non native
+                operating systems and software.
+            \subsection{Paravirtualization}
+            \subsection{Programming-Environment Virtualization}
+            \subsection{Emulation}
+            \subsection{Application Containment}
     \listoffigures
-    \chapter{Practicals}
-        \section{Introduction to Operating Systems}
-        \section{Operating System Structures}
-        \section{Processes}
-        \section{Threads}
-            \subsection{Thread Creation}
-            Exercise: Modify sampleThread.c. Create a third thread and this time sum up the first 20 numbers {1,2,...20}.
-            Practice passing a struct to the thread:
-            \begin{minted}{c}
-                typedef struct num_thdata {
-                    int thread_no;
-                    int sum_to;
-                } thsum;
-            \end{minted}
-                \inputminted{c}{code/threads/prac/sampleThread.c}
-            \subsection{Producer and Consumer Threads}
-            \subsection{Searching Hash Table Values}
-            \subsection{OpenMP}
-        \section{Synchronisation}
-        \section{Safety Critical Systems}
-        \section{Distributed Systems}
-        \section{CPU Scheduling}
-        \section{Deadlocks}
 \end{document}
